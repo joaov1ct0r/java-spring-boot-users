@@ -2,20 +2,12 @@ package com.joaov1ct0r.restful_api_users_java.modules.users.entities;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
 @Entity(name = "event_logs")
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class EventLog {
+public class EventLogEntity {
     @Column(nullable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -27,7 +19,7 @@ public class EventLog {
 
     @ManyToOne
     @JoinColumn(name = "userId", insertable = false, updatable = false)
-    private User user;
+    private UserEntity user;
 
     @Column(nullable = false)
     @CreationTimestamp
@@ -38,4 +30,69 @@ public class EventLog {
 
     @Column(nullable = false)
     private String description;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    @Nullable
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(@Nullable UUID userId) {
+        this.userId = userId;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Number getCode() {
+        return code;
+    }
+
+    public void setCode(Number code) {
+        this.code = code;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public EventLogEntity() {}
+
+    public EventLogEntity (
+            UUID id,
+            @Nullable UUID userId,
+            LocalDateTime timestamp,
+            Number code,
+            String description
+    ) {
+        this.id = id;
+        this.userId = userId;
+        this.timestamp = timestamp;
+        this.code = code;
+        this.description = description;
+    }
 }
