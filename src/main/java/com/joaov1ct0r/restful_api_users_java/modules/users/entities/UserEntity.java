@@ -6,19 +6,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-import lombok.Data;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Builder;
 
 @Entity(name = "users")
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class UserEntity {
     @Column(nullable = false)
     @Id
@@ -54,13 +49,35 @@ public class UserEntity {
 
     @ManyToOne
     @JoinColumn(name = "userWhoUpdatedId", insertable = false, updatable = false)
-    private User userWhoUpdated;
+    private UserEntity userWhoUpdated;
 
     @OneToMany
     private List<ErrorLogEntity> errorLogs;
 
     @OneToMany
     private List<EventLogEntity> eventLogs;
+
+    public UserEntity() {}
+
+    public UserEntity(
+            UUID id,
+            String name,
+            String email,
+            String username,
+            String password,
+            LocalDateTime createdAt,
+            @Nullable LocalDateTime updatedAt,
+            @Nullable UUID userWhoUpdatedId
+    ) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.userWhoUpdatedId = userWhoUpdatedId;
+    }
 
     @Nullable
     public UUID getUserWhoUpdatedId() {
