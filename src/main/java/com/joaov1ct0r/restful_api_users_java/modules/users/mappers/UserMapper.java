@@ -1,7 +1,11 @@
 package com.joaov1ct0r.restful_api_users_java.modules.users.mappers;
 
+import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.CreateUserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class UserMapper {
     public static UserDTO toDTO(UserEntity user) {
@@ -14,5 +18,18 @@ public class UserMapper {
         userDTO.setUpdatedAt(user.getUpdatedAt());
         userDTO.setUserWhoUpdatedId(user.getUserWhoUpdatedId());
         return userDTO;
+    }
+
+    public static UserEntity toPersistence(CreateUserDTO user) {
+        return new UserEntity(
+                UUID.randomUUID(),
+                user.getName(),
+                user.getEmail(),
+                user.getUsername(),
+                user.getPassword(),
+                LocalDateTime.now(),
+                null,
+                null
+        );
     }
 }
