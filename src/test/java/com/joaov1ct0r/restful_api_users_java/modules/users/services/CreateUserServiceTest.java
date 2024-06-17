@@ -1,11 +1,12 @@
 package com.joaov1ct0r.restful_api_users_java.modules.users.services;
 
-import com.joaov1ct0r.restful_api_users_java.exceptions.BadRequestException;
-import com.joaov1ct0r.restful_api_users_java.modules.users.entities.ErrorLogEntity;
+import com.joaov1ct0r.restful_api_users_java.modules.domain.exceptions.BadRequestException;
+import com.joaov1ct0r.restful_api_users_java.modules.domain.entities.ErrorLogEntity;
+import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.CreateUserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
-import com.joaov1ct0r.restful_api_users_java.modules.users.repositories.ErrorLogsRepository;
+import com.joaov1ct0r.restful_api_users_java.modules.domain.repositories.ErrorLogsRepository;
+import com.joaov1ct0r.restful_api_users_java.modules.users.mappers.UserMapper;
 import com.joaov1ct0r.restful_api_users_java.modules.users.repositories.UserRepository;
-import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,7 +22,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -67,17 +70,13 @@ public class CreateUserServiceTest {
     @DisplayName("Should not be able to register a user with unavailable name")
     public void shouldNotBeAbleToRegisterAUserWithUnavailableName() {
         try {
-            UserEntity user = new UserEntity(
-                    UUID.randomUUID(),
+            CreateUserDTO user = new CreateUserDTO(
                     "any_name",
                     "any_email@mail.com",
                     "any_username",
-                    "any_password",
-                    LocalDateTime.now(),
-                    null,
-                    null
+                    "any_password"
             );
-            when(this.userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(new UserEntity(
+            when(this.userRepository.findByUsername(anyString())).thenReturn(Optional.of(new UserEntity(
                     UUID.randomUUID(),
                     "any_other_name",
                     "any_other_email@mail.com",
@@ -98,18 +97,14 @@ public class CreateUserServiceTest {
     @DisplayName("Should not be able to register a user with unavailable email")
     public void shouldNotBeAbleToRegisterAUserWithUnavailableEmail() {
        try {
-            UserEntity user = new UserEntity(
-                    UUID.randomUUID(),
+            CreateUserDTO user = new CreateUserDTO(
                     "any_name",
                     "any_email@mail.com",
                     "any_username",
-                    "any_password",
-                    LocalDateTime.now(),
-                    null,
-                    null
+                    "any_password"
             );
-            when(this.userRepository.findByUsername(user.getUsername())).thenReturn(Optional.empty());
-            when(this.userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(new UserEntity(
+            when(this.userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+            when(this.userRepository.findByEmail(anyString())).thenReturn(Optional.of(new UserEntity(
                     UUID.randomUUID(),
                     "any_other_name",
                     "any_other_email@mail.com",
@@ -129,23 +124,21 @@ public class CreateUserServiceTest {
     @Test
     @DisplayName("Should be able to register a new user")
     public void shouldBeAbleToRegisterANewUser() {
-       UserEntity user = new UserEntity(
-               UUID.randomUUID(),
+       CreateUserDTO user = new CreateUserDTO(
                "any_name",
                "any_email@mail.com",
                "any_username",
-               "any_password",
-               LocalDateTime.now(),
-               null,
-               null
+               "any_password"
        );
-       when(this.userRepository.findByUsername(user.getUsername())).thenReturn(Optional.empty());
-       when(this.userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
-       when(this.passwordEncoder.encode(user.getPassword())).thenReturn("any_password");
-       when(this.userRepository.save(user)).thenReturn(user);
+       when(this.userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+       when(this.userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+       when(this.passwordEncoder.encode(anyString())).thenReturn("any_password");
+       when(this.userRepository.save(any())).thenReturn(
+               UserMapper.toPersistence(user)
+       );
 
-       this.sut.execute(user);
+       var createdUser = this.sut.execute(user);
 
-       assertThat(user).hasFieldOrProperty("id");
+       assertThat(createdUser).hasFieldOrProperty("id");
     }
 }
