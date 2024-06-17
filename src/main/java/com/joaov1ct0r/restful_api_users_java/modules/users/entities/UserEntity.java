@@ -1,5 +1,7 @@
 package com.joaov1ct0r.restful_api_users_java.modules.users.entities;
 
+import com.joaov1ct0r.restful_api_users_java.modules.domain.entities.ErrorLogEntity;
+import com.joaov1ct0r.restful_api_users_java.modules.domain.entities.EventLogEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -7,10 +9,8 @@ import jakarta.validation.constraints.Pattern;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Entity(name = "users")
