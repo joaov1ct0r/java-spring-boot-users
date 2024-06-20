@@ -1,4 +1,4 @@
-package com.joaov1ct0r.restful_api_users_java.modules.users.services;
+package com.joaov1ct0r.restful_api_users_java.modules.users.services.users;
 
 import com.joaov1ct0r.restful_api_users_java.modules.domain.exceptions.BadRequestException;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.entities.ErrorLogEntity;
@@ -7,6 +7,7 @@ import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.repositories.ErrorLogsRepository;
 import com.joaov1ct0r.restful_api_users_java.modules.users.mappers.UserMapper;
 import com.joaov1ct0r.restful_api_users_java.modules.users.repositories.UserRepository;
+import com.joaov1ct0r.restful_api_users_java.modules.users.services.CreateUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,15 +48,7 @@ public class CreateUserServiceTest {
         Mockito.reset(this.passwordEncoder);
         Mockito.reset(this.errorLogsRepository);
 
-        when(this.errorLogsRepository.save(
-                new ErrorLogEntity(
-                        UUID.randomUUID(),
-                        UUID.randomUUID(),
-                        LocalDateTime.now(),
-                        400,
-                        "any_description"
-                )
-        )).thenReturn(
+        when(this.errorLogsRepository.save(any())).thenReturn(
                 new ErrorLogEntity(
                         UUID.randomUUID(),
                         UUID.randomUUID(),
