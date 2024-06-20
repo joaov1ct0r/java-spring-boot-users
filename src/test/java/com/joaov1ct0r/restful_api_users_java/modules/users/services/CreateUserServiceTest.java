@@ -123,7 +123,7 @@ public class CreateUserServiceTest {
 
     @Test
     @DisplayName("Should be able to register a new user")
-    public void shouldBeAbleToRegisterANewUser() {
+    public void shouldBeAbleToRegisterANewUser() throws Exception {
        CreateUserDTO user = new CreateUserDTO(
                "any_name",
                "any_email@mail.com",
