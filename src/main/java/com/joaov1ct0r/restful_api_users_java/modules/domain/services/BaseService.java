@@ -2,6 +2,7 @@ package com.joaov1ct0r.restful_api_users_java.modules.domain.services;
 
 import com.joaov1ct0r.restful_api_users_java.modules.domain.entities.ErrorLogEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.exceptions.BadRequestException;
+import com.joaov1ct0r.restful_api_users_java.modules.domain.exceptions.UnauthorizedException;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.repositories.ErrorLogsRepository;
 import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,9 @@ public abstract class BaseService {
 
     protected BadRequestException badRequestException(String message) {
         return new BadRequestException(message);
+    }
+
+    protected UnauthorizedException unauthorizedException(String message) {
+        return new UnauthorizedException(message);
     }
 }
