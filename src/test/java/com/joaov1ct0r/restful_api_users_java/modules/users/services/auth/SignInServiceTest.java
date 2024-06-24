@@ -48,7 +48,6 @@ public class SignInServiceTest {
         Mockito.reset(this.passwordEncoder);
         Mockito.reset(this.errorLogsRepository);
 
-
         when(this.errorLogsRepository.save(any())).thenReturn(new ErrorLogEntity(
                 UUID.randomUUID(),
                 UUID.randomUUID(),
