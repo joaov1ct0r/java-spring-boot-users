@@ -1,6 +1,6 @@
 package com.joaov1ct0r.restful_api_users_java.modules.users.services.auth;
 
-import com.joaov1ct0r.restful_api_users_java.modules.auth.services.CreateCookieConfig;
+import com.joaov1ct0r.restful_api_users_java.modules.auth.services.CreateCookieService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CreateCookieServiceTest {
 
     @InjectMocks
-    private CreateCookieConfig sut;
+    private CreateCookieService sut;
 
     @Test
     @DisplayName("should be able to create a new cookie")
