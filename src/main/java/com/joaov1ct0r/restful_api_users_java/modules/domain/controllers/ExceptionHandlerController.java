@@ -22,7 +22,7 @@ public class ExceptionHandlerController extends BaseController {
 
        ResponseDTO response = this.responseMapper.toDTO(
                500,
-               "Erro Interno",
+               "Erro interno",
                null
        );
 
