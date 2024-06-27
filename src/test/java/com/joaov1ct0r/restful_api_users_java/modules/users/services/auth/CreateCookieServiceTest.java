@@ -21,9 +21,10 @@ public class CreateCookieServiceTest {
     @DisplayName("should be able to create a new cookie")
     public void shouldBeAbleToCreateANewCookie() {
         String cookieName = "any_cookie_name";
+        String cookieValue = "any_cookie_value";
         String domainName = "any_domain_name";
 
-        var createdCookie = this.sut.execute(cookieName, domainName);
+        var createdCookie = this.sut.execute(cookieName, cookieValue, domainName);
 
         assertThat(createdCookie.getName()).isEqualTo(cookieName);
     }
