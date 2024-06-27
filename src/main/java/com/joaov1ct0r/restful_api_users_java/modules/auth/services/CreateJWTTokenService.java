@@ -13,7 +13,7 @@ import java.time.Instant;
 public class CreateJWTTokenService {
     @Value("${security.token.secret}")
     private String tokenSecret;
-//
+
     private final Instant tokenExpiration = Instant.now().plus(Duration.ofMinutes(10));
 
     public CreateJWTTokenServiceDTO execute(
