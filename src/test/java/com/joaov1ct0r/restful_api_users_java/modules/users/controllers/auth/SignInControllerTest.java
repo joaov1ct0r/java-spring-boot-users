@@ -1,4 +1,4 @@
-package com.joaov1ct0r.restful_api_users_java.modules.users.controllers;
+package com.joaov1ct0r.restful_api_users_java.modules.users.controllers.auth;
 
 import com.github.javafaker.Faker;
 import com.joaov1ct0r.restful_api_users_java.modules.auth.dtos.SignInDTO;
@@ -61,8 +61,6 @@ public class SignInControllerTest {
                         .content(TestUtils.objectToJson(signInDTO))
         ).andReturn().getResponse().getContentAsString();
        ResponseDTO response = TestUtils.jsonToObject(signInResponse, ResponseDTO.class);
-
-       System.out.println(response.getMessage());
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
