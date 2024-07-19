@@ -1,4 +1,4 @@
-package com.joaov1ct0r.restful_api_users_java.modules.users.controllers;
+package com.joaov1ct0r.restful_api_users_java.modules.users.controllers.users;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
