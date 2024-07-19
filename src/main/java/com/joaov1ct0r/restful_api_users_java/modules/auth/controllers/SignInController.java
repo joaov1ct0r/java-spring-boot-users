@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/signin/")
 public class SignInController extends BaseController {
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @Autowired
     private SignInService signInService;
 
@@ -35,13 +40,24 @@ public class SignInController extends BaseController {
     ) throws Exception {
         UserDTO user = this.signInService.execute(credentials);
 
+        var usernameAndPassword = new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword());
+        var auth = this.authenticationManager.authenticate(usernameAndPassword);
+
         var createdToken = this.createJWTTokenService.execute(user.getId().toString());
 
         var token = createdToken.getToken();
         var payload = createdToken.getPayload();
 
-        var userCookie = this.createCookieService.execute("user", String.valueOf(payload),"localhost");
-        var authorizationCookie = this.createCookieService.execute("authorization", token, "localhost");
+        var userCookie = this.createCookieService.execute(
+                "user",
+                payload.getUserId(),
+                "localhost"
+        );
+        var authorizationCookie = this.createCookieService.execute(
+                "authorization",
+                token,
+                "localhost"
+        );
 
         response.addCookie(userCookie);
         response.addCookie(authorizationCookie);
