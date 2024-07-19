@@ -14,6 +14,8 @@ public class CreateJWTTokenService {
     @Value("${security.token.secret}")
     private String tokenSecret;
 
+    private final String tokenIssuer = "localhost";
+
     private final Instant tokenExpiration = Instant.now().plus(Duration.ofMinutes(10));
 
     public CreateJWTTokenServiceDTO execute(
@@ -21,10 +23,9 @@ public class CreateJWTTokenService {
     ) {
         Algorithm algorithm = Algorithm.HMAC256(this.tokenSecret);
         var payload = new CreateJWTTokenServicePayloadDTO(userId);
-        String tokenIssuer = "localhost";
 
         var token = JWT.create()
-                .withIssuer(tokenIssuer)
+                .withIssuer(this.tokenIssuer)
                 .withExpiresAt(this.tokenExpiration)
                 .withSubject(payload.getUserId())
                 .withClaim("userId", payload.getUserId())
