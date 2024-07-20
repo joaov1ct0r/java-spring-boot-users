@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/signin/").permitAll()
                         .requestMatchers(HttpMethod.POST, "/signup/").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/signout/").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/signout/").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(this.securityFilter, UsernamePasswordAuthenticationFilter.class)
