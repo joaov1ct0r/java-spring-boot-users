@@ -2,6 +2,7 @@ package com.joaov1ct0r.restful_api_users_java.modules.domain.services;
 
 import com.joaov1ct0r.restful_api_users_java.modules.domain.entities.ErrorLogEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.exceptions.BadRequestException;
+import com.joaov1ct0r.restful_api_users_java.modules.domain.exceptions.ForbiddenException;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.exceptions.UnauthorizedException;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.repositories.ErrorLogsRepository;
 import jakarta.annotation.Nullable;
@@ -36,5 +37,9 @@ public abstract class BaseService {
 
     protected UnauthorizedException unauthorizedException(String message) {
         return new UnauthorizedException(message);
+    }
+
+    protected ForbiddenException forbiddenException(String message) {
+        return new ForbiddenException(message);
     }
 }
