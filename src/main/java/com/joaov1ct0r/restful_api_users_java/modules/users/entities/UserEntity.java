@@ -51,14 +51,14 @@ public class UserEntity implements UserDetails {
     @Nullable
     private UUID userWhoUpdatedId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userWhoUpdatedId", insertable = false, updatable = false)
     private UserEntity userWhoUpdated;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<ErrorLogEntity> errorLogs;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<EventLogEntity> eventLogs;
 
     public UserEntity() {}
