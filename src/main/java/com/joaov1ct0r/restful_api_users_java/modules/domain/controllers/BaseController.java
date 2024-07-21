@@ -3,6 +3,7 @@ package com.joaov1ct0r.restful_api_users_java.modules.domain.controllers;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.dtos.CreateEventLogServiceDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.mappers.ResponseMapper;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.services.CreateEventLogService;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.UUID;
 
@@ -14,7 +15,7 @@ public abstract class BaseController {
     protected CreateEventLogService createEventLogService;
 
     protected void generateEventLog(
-            UUID userId,
+            @Nullable UUID userId,
             Number code,
             String description
 
@@ -27,5 +28,4 @@ public abstract class BaseController {
                 )
         );
     }
-
 }
