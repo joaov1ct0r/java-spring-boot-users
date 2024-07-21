@@ -20,8 +20,8 @@ public class ErrorLogEntity {
     @Nullable
     private UUID userId;
 
-    @ManyToOne
-    @JoinColumn(name = "userId", insertable = false, updatable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "userId", referencedColumnName = "id", insertable = false, updatable = false)
     private UserEntity user;
 
     @Column(nullable = false)
