@@ -2,16 +2,16 @@ package com.joaov1ct0r.restful_api_users_java.modules.users.dtos;
 
 import jakarta.annotation.Nullable;
 
-public class GetAllUsersDTO {
+public class FindAllUsersDTO {
     private int perPage;
     private int page;
     private @Nullable String name;
     private @Nullable String username;
     private @Nullable String email;
 
-    public GetAllUsersDTO() {}
+    public FindAllUsersDTO() {}
 
-    public GetAllUsersDTO(
+    public FindAllUsersDTO(
             int perPage,
             int page,
             @Nullable String name,
