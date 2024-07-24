@@ -1,6 +1,7 @@
 package com.joaov1ct0r.restful_api_users_java.modules.users.services;
 
 import com.joaov1ct0r.restful_api_users_java.modules.domain.services.BaseService;
+import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UpdateUserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.users.mappers.UserMapper;
@@ -8,6 +9,8 @@ import com.joaov1ct0r.restful_api_users_java.modules.users.repositories.UserRepo
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -18,8 +21,8 @@ public class UpdateUserService extends BaseService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserDTO execute(UserEntity userDTO, String tokenUserId) {
-        var isUserRegistered = this.userRepository.findById(userDTO.getId());
+    public UserDTO execute(UpdateUserDTO userDTO, String tokenUserId) {
+        var isUserRegistered = this.userRepository.findById(UUID.fromString(userDTO.getId()));
 
         var userWasntFound = isUserRegistered.isEmpty();
 
@@ -33,13 +36,13 @@ public class UpdateUserService extends BaseService {
             throw this.badRequestException("Usuário não encontrado!");
         }
 
-        var isEditingOtherUser = !userDTO.getId().equals(isUserRegistered.get().getId());
+        var isEditingOtherUser = !UUID.fromString(userDTO.getId()).equals(isUserRegistered.get().getId());
 
         if (isEditingOtherUser) {
             this.generateErrorLog(
                     UUID.fromString(tokenUserId),
                     403,
-                    "Usuário com id: " + tokenUserId + " tentou editar usuário com id: " + userDTO.getId().toString()
+                    "Usuário com id: " + tokenUserId + " tentou editar usuário com id: " + userDTO.getId()
             );
 
             throw this.forbiddenException("Não permitido!");
@@ -75,13 +78,21 @@ public class UpdateUserService extends BaseService {
             throw this.badRequestException("Email do usuário não esta disponivel");
         }
 
-        var shouldUpdatePassword = !userDTO.getPassword().isEmpty();
+        var userToUpdate = isUserRegistered.get();
+
+        var shouldUpdatePassword = userDTO.getPassword() != null;
 
         if (shouldUpdatePassword) {
-            userDTO.setPassword(this.passwordEncoder.encode(userDTO.getPassword()));
+            userToUpdate.setPassword(this.passwordEncoder.encode(userDTO.getPassword()));
         }
 
-        UserEntity updatedUser = this.userRepository.save(userDTO);
+        userToUpdate.setName(userDTO.getName());
+        userToUpdate.setEmail(userDTO.getEmail());
+        userToUpdate.setUsername(userDTO.getUsername());
+        userToUpdate.setUpdatedAt(LocalDateTime.now());
+        userToUpdate.setUserWhoUpdatedId(UUID.fromString(tokenUserId));
+
+        UserEntity updatedUser = this.userRepository.save(userToUpdate);
 
         return UserMapper.toDTO(updatedUser);
     }
