@@ -4,6 +4,7 @@ import com.joaov1ct0r.restful_api_users_java.modules.domain.entities.ErrorLogEnt
 import com.joaov1ct0r.restful_api_users_java.modules.domain.exceptions.BadRequestException;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.exceptions.ForbiddenException;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.repositories.ErrorLogsRepository;
+import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UpdateUserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.users.repositories.UserRepository;
 import com.joaov1ct0r.restful_api_users_java.modules.users.services.UpdateUserService;
@@ -65,15 +66,12 @@ public class UpdateUserServiceTest {
     @Test
     @DisplayName("Should not be able to update unknown user")
     public void shouldNotBeAbleToUpdateUnknownUser() {
-        UserEntity userDTO = new UserEntity(
-                UUID.randomUUID(),
-                "any_name",
-                "any_email",
+        var userDTO = new UpdateUserDTO(
+                UUID.randomUUID().toString(),
                 "any_username",
-                "any_password",
-                LocalDateTime.now(),
-                null,
-                null
+                "any_email",
+                "any_name",
+                "any_password"
         );
         String tokenUserId = UUID.randomUUID().toString();
         when(this.userRepository.findById(any())).thenReturn(Optional.empty());
@@ -88,15 +86,12 @@ public class UpdateUserServiceTest {
     @Test
     @DisplayName("Should not be able to update other users")
     public void shouldNotBeAbleToUpdateOtherUsers() {
-        UserEntity userDTO = new UserEntity(
-                UUID.randomUUID(),
-                "any_name",
-                "any_email",
+        var userDTO = new UpdateUserDTO(
+                UUID.randomUUID().toString(),
                 "any_username",
-                "any_password",
-                LocalDateTime.now(),
-                null,
-                null
+                "any_email",
+                "any_name",
+                "any_password"
         );
         String tokenUserId = UUID.randomUUID().toString();
         when(this.userRepository.findById(any())).thenReturn(Optional.of(
@@ -122,18 +117,26 @@ public class UpdateUserServiceTest {
     @Test
     @DisplayName("Should not be able to update user with unavailable username")
     public void shouldNotBeAbleToUpdateUserWithUnavailableUsername() {
-        UserEntity userDTO = new UserEntity(
-                UUID.randomUUID(),
-                "any_name",
-                "any_email",
+        var userDTO = new UpdateUserDTO(
+                UUID.randomUUID().toString(),
                 "any_username",
-                "any_password",
-                LocalDateTime.now(),
-                null,
-                null
+                "any_email",
+                "any_name",
+                "any_password"
         );
         String tokenUserId = UUID.randomUUID().toString();
-        when(this.userRepository.findById(any())).thenReturn(Optional.of(userDTO));
+        when(this.userRepository.findById(any())).thenReturn(Optional.of(
+                new UserEntity(
+                        UUID.fromString(userDTO.getId()),
+                        userDTO.getName(),
+                        userDTO.getEmail(),
+                        userDTO.getUsername(),
+                        userDTO.getPassword(),
+                        LocalDateTime.now(),
+                        null,
+                        null
+                )
+        ));
         when(this.userRepository.findByUsername(anyString())).thenReturn(Optional.of(
                new UserEntity(
                         UUID.randomUUID(),
@@ -157,18 +160,26 @@ public class UpdateUserServiceTest {
     @Test
     @DisplayName("Should not be able to update user with unavailable email")
     public void shouldNotBeAbleToUpdateUserWithUnavailableEmail() {
-        UserEntity userDTO = new UserEntity(
-                UUID.randomUUID(),
-                "any_name",
-                "any_email",
+        var userDTO = new UpdateUserDTO(
+                UUID.randomUUID().toString(),
                 "any_username",
-                "any_password",
-                LocalDateTime.now(),
-                null,
-                null
+                "any_email",
+                "any_name",
+                "any_password"
         );
         String tokenUserId = UUID.randomUUID().toString();
-        when(this.userRepository.findById(any())).thenReturn(Optional.of(userDTO));
+       when(this.userRepository.findById(any())).thenReturn(Optional.of(
+                new UserEntity(
+                        UUID.fromString(userDTO.getId()),
+                        userDTO.getName(),
+                        userDTO.getEmail(),
+                        userDTO.getUsername(),
+                        userDTO.getPassword(),
+                        LocalDateTime.now(),
+                        null,
+                        null
+                )
+        ));
         when(this.userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
         when(this.userRepository.findByEmail(anyString())).thenReturn(Optional.of(
                new UserEntity(
@@ -193,24 +204,43 @@ public class UpdateUserServiceTest {
     @Test
     @DisplayName("Should be able to update user")
     public void shouldBeAbleToUpdateUser() {
-        UserEntity userDTO = new UserEntity(
-                UUID.randomUUID(),
-                "any_name",
-                "any_email",
+        var userDTO = new UpdateUserDTO(
+                UUID.randomUUID().toString(),
                 "any_username",
-                "any_password",
-                LocalDateTime.now(),
-                null,
-                null
+                "any_email",
+                "any_name",
+                "any_password"
         );
         String tokenUserId = UUID.randomUUID().toString();
-        when(this.userRepository.findById(any())).thenReturn(Optional.of(userDTO));
+       when(this.userRepository.findById(any())).thenReturn(Optional.of(
+                new UserEntity(
+                        UUID.fromString(userDTO.getId()),
+                        userDTO.getName(),
+                        userDTO.getEmail(),
+                        userDTO.getUsername(),
+                        userDTO.getPassword(),
+                        LocalDateTime.now(),
+                        null,
+                        null
+                )
+        ));
         when(this.userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
         when(this.userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
-        when(this.userRepository.save(any())).thenReturn(userDTO);
+        when(this.userRepository.save(any())).thenReturn(
+                new UserEntity(
+                        UUID.fromString(userDTO.getId()),
+                        userDTO.getName(),
+                        userDTO.getEmail(),
+                        userDTO.getUsername(),
+                        userDTO.getPassword(),
+                        LocalDateTime.now(),
+                        LocalDateTime.now(),
+                        null
+                )
+        );
 
         var updatedUser = this.sut.execute(userDTO, tokenUserId);
 
-        assertThat(updatedUser.getId()).isEqualTo(userDTO.getId());
+        assertThat(updatedUser.getId()).isEqualTo(UUID.fromString(userDTO.getId()));
     }
 }
