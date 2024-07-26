@@ -7,8 +7,14 @@ import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.CountAllUsersDTO
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.FindAllUsersDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.services.CountAllUsersService;
 import com.joaov1ct0r.restful_api_users_java.modules.users.services.FindAllUsersService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +26,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/user/")
+@Tag(name = "Usuário")
 public class FindAllUsersController extends BaseController {
     @Autowired
     private FindAllUsersService findAllUsersService;
@@ -28,6 +35,15 @@ public class FindAllUsersController extends BaseController {
     private CountAllUsersService countAllUsersService;
 
     @GetMapping("/")
+    @Operation(summary = "Buscar por todos o usuários", description = "É possivel realizar uma busca por todos usuários " +
+            "com ou sem filtros de (name, username, email)")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Busca por usuários realizada com sucesso!", content = {
+                    @Content(schema = @Schema(implementation = ResponsePagDTO.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "Erro Interno")
+    })
+    @SecurityRequirement(name = "jwt_auth")
     public ResponseEntity<Object> handle(
             HttpServletRequest req,
             @RequestParam(name = "perPage", defaultValue = "20") String perPage,

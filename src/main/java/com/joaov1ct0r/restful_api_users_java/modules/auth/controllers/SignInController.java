@@ -7,6 +7,12 @@ import com.joaov1ct0r.restful_api_users_java.modules.auth.services.SignInService
 import com.joaov1ct0r.restful_api_users_java.modules.domain.controllers.BaseController;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.dtos.ResponseDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UserDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/signin/")
+@Tag(name = "Auth")
 public class SignInController extends BaseController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -34,6 +41,15 @@ public class SignInController extends BaseController {
     private CreateCookieService createCookieService;
 
     @PostMapping("/")
+    @Operation(summary = "Sign in", description = "É possivel realizar o sign in de um usuário já cadastrado!")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Sign in realizado com sucesso!", content = {
+                    @Content(schema = @Schema(implementation = ResponseDTO.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Erro da requisição"),
+            @ApiResponse(responseCode = "401", description = "Não autorizado"),
+            @ApiResponse(responseCode = "500", description = "Erro Interno")
+    })
     public ResponseEntity<Object> handle(
             HttpServletResponse response,
             @Valid @RequestBody SignInDTO credentials

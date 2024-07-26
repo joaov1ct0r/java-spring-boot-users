@@ -6,6 +6,11 @@ import com.joaov1ct0r.restful_api_users_java.modules.domain.repositories.EventLo
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.DeleteUserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.services.DeleteUserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/user/")
+@Tag(name = "Usuário")
 public class DeleteUserController extends BaseController {
     @Autowired
     private DeleteUserService deleteUserService;
@@ -25,6 +31,14 @@ public class DeleteUserController extends BaseController {
     private EventLogsRepository eventLogsRepository;
 
     @DeleteMapping("/")
+    @Operation(summary = "Deletar um usuário", description = "É possivel deletar um usuário já cadastrado")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso!"),
+            @ApiResponse(responseCode = "403", description = "Não permitido"),
+            @ApiResponse(responseCode = "500", description = "Erro Interno")
+
+    })
+    @SecurityRequirement(name = "jwt_auth")
     public ResponseEntity<Object> handle(
             HttpServletRequest req,
             @Valid @RequestBody DeleteUserDTO dto
