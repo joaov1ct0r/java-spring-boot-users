@@ -25,8 +25,6 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/swagger-resource/**",
             "/actuator/**",
-            "/signin",
-            "/signup"
     };
 
     @Bean
@@ -36,6 +34,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/signin/").permitAll()
                         .requestMatchers(HttpMethod.POST, "/signup/").permitAll()
+                        .requestMatchers(PERMIT_ALL_LIST).permitAll()
                         .requestMatchers(HttpMethod.GET, "/signout/").hasRole("USER")
                         .anyRequest().authenticated()
                 )
