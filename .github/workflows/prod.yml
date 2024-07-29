@@ -15,3 +15,11 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
+      - name: Build project
+        run: mvn clean install
+      - name: Login docker
+        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+      - name: Build docker image
+        run: docker build -t joaov1ct0r/java_users_api_rest .
+      - name: Publish image
+        run: docker push joaov1ct0r/java_users_api_rest
