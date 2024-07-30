@@ -23,3 +23,13 @@ jobs:
         run: docker build -t joaov1ct0r/java_users_api_rest .
       - name: Publish image
         run: docker push joaov1ct0r/java_users_api_rest
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull image docker hub
+        run: docker pull joaov1ct0r/java_users_api_rest:latest
+      - name: Remove container
+        run: docker rm -f java_users_api_rest
+      - name: Run docker container Java users REST API
+        run: docker run -d -p 8080:8080 -e DATABASE_URL=${{secrets.DATABASE_URL}} -e DATABASE_PASSWORD='${{secrets.DATABASE_PASSWORD}}' -e DATABASE_USERNAME=${{secrets.DATABASE_USERNAME}} -e DATABASE_NAME=${{secrets.DATABASE_NAME}} --name java_users_api_rest joaov1ct0r/java_users_api_rest
