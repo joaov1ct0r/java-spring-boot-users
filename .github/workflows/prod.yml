@@ -1,4 +1,4 @@
-name: Java users Rest API
+name: Java users rest API
 
 on:
   push:
