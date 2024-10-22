@@ -67,12 +67,12 @@ public class SignInController extends BaseController {
         var userCookie = this.createCookieService.execute(
                 "user",
                 payload.getUserId(),
-                "crud.shop"
+                "api.crud.shop"
         );
         var authorizationCookie = this.createCookieService.execute(
                 "authorization",
                 token,
-                "crud.shop"
+                "api.crud.shop"
         );
 
         response.addCookie(userCookie);
