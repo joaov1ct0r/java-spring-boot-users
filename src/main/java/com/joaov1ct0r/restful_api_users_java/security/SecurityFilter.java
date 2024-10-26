@@ -2,7 +2,6 @@ package com.joaov1ct0r.restful_api_users_java.security;
 
 import com.joaov1ct0r.restful_api_users_java.modules.auth.services.JWTService;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.exceptions.UnauthorizedException;
-import com.joaov1ct0r.restful_api_users_java.modules.domain.exceptions.BadRequestException;
 import com.joaov1ct0r.restful_api_users_java.modules.users.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -36,8 +35,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             var user = this.userRepository.findById(UUID.fromString(decodedToken.getSubject()));
 
             if (user.isEmpty()) {
-                //throw new UnauthorizedException("Não autorizado");
-                throw new BadRequestException("Não autorizado");
+                throw new UnauthorizedException("Não autorizado");
             }
 
             UserDetails details = user.get();
