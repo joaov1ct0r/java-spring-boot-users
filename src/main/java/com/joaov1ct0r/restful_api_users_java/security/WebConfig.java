@@ -1,18 +1,24 @@
 package com.joaov1ct0r.restful_api_users_java.security;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class WebConfig {
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**") // Apply CORS to all paths
-                .allowedOrigins("https://crud.shop") // Specify allowed origins
-                .allowedMethods("GET", "POST", "PUT", "DELETE") // Specify allowed HTTP methods
-                .allowedHeaders("*") // Specify allowed headers
-                .allowCredentials(true); // Allow credentials (cookies, authorization headers)
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**") // Aplica CORS a todos os endpoints
+                        .allowedOrigins("https://crud.shop") // Define a origem permitida
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Define os métodos HTTP permitidos
+                        .allowCredentials(true); // Permite o envio de cookies
+            }
+        };
     }
 }
+
