@@ -9,7 +9,6 @@ import com.joaov1ct0r.restful_api_users_java.modules.users.repositories.UserRepo
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -50,7 +49,7 @@ public class UpdateUserService extends BaseService {
 
         var isUsernameInUseByOtherUser = this.userRepository.findByUsername(userDTO.getUsername());
 
-        var usernameIsntAvailable = isUsernameInUseByOtherUser.isPresent();
+        var usernameIsntAvailable = isUsernameInUseByOtherUser.isPresent() && !isUsernameInUseByOtherUser.get().getId().equals(isUserRegistered.get().getId());
 
         if (usernameIsntAvailable) {
             this.generateErrorLog(
@@ -65,7 +64,7 @@ public class UpdateUserService extends BaseService {
 
         var isEmailInUseByOtherUser = this.userRepository.findByEmail(userDTO.getEmail());
 
-        var emailIsntAvailable = isEmailInUseByOtherUser.isPresent();
+        var emailIsntAvailable = isEmailInUseByOtherUser.isPresent() && !isEmailInUseByOtherUser.get().getId().equals(isUserRegistered.get().getId());
 
         if (emailIsntAvailable) {
             this.generateErrorLog(
