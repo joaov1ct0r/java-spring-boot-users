@@ -45,7 +45,7 @@ public class SignInService extends BaseService {
                     "Usuário com username " + authUser.getUsername() + ", tentou realizar login com senha incorreta"
             );
 
-            throw this.badRequestException("Nome de usuário e ou senha incorretos");
+            throw this.unauthorizedException("Nome de usuário e ou senha incorretos");
         }
 
         return UserMapper.toDTO(authUser);
