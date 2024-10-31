@@ -14,9 +14,10 @@ public class CreateJWTTokenService {
     @Value("${security.token.secret}")
     private String tokenSecret;
 
-    private final String tokenIssuer = "localhost";
+    private final String tokenIssuer = "https://api.crud.shop";
 
-    private final Instant tokenExpiration = Instant.now().plus(Duration.ofMinutes(10));
+//    private final Instant tokenExpiration = Instant.now().plus(Duration.ofMinutes(10));
+    private final Instant tokenExpiration = Instant.now().plus(Duration.ofDays(1));
 
     public CreateJWTTokenServiceDTO execute(
             String userId

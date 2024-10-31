@@ -12,7 +12,7 @@ public class CreateCookieService {
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         cookie.setSecure(true);
-        cookie.setMaxAge((int) Duration.ofHours(1).toSeconds());
+        cookie.setMaxAge((int) Duration.ofDays(1).toSeconds());
 
         return cookie;
     }
