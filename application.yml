@@ -1,4 +1,10 @@
 spring:
+  web:
+    cors:
+      allowed-origin-patterns: "https://crud.shop"  # Set allowed origins
+      allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"            # Allowed HTTP methods
+      allowed-headers: "*"                              # Allowed headers (use * to allow all)
+      allow-credentials: true                           # Allow credentials (cookies, authorization headers)
   flyway:
     enabled: true
     locations: classpath:db/migration
