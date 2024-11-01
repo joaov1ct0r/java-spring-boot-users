@@ -22,7 +22,7 @@ public class JWTService {
                     .build()
                     .verify(token);
         } catch(JWTVerificationException e) {
-            throw new BadRequestException("JWT Verification Exception");
+            throw new BadRequestException(e.getMessage());
         } catch (Exception e) {
 //            throw new RuntimeException("Internal Server Error");
             throw new RuntimeException(e.getMessage());
