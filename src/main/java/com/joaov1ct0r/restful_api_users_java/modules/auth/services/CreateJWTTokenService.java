@@ -6,28 +6,29 @@ import com.joaov1ct0r.restful_api_users_java.modules.auth.dtos.CreateJWTTokenSer
 import com.joaov1ct0r.restful_api_users_java.modules.auth.dtos.CreateJWTTokenServiceDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import java.time.Duration;
-import java.time.Instant;
+import java.util.Date;
+import java.util.TimeZone;
+import java.util.Calendar;
 
 @Service
 public class CreateJWTTokenService {
     @Value("${security.token.secret}")
     private String tokenSecret;
-
     private final String tokenIssuer = "https://api.crud.shop";
-
-//    private final Instant tokenExpiration = Instant.now().plus(Duration.ofMinutes(10));
-    private final Instant tokenExpiration = Instant.now().plus(Duration.ofDays(1));
 
     public CreateJWTTokenServiceDTO execute(
             String userId
     ) {
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar.add(Calendar.DAY_OF_YEAR, 2); // Configura a expiração para 2 dia a partir de agora
+        Date expirationDate = calendar.getTime();
+
         Algorithm algorithm = Algorithm.HMAC256(this.tokenSecret);
         var payload = new CreateJWTTokenServicePayloadDTO(userId);
 
         var token = JWT.create()
                 .withIssuer(this.tokenIssuer)
-                .withExpiresAt(this.tokenExpiration)
+                .withExpiresAt(expirationDate)
                 .withSubject(payload.getUserId())
                 .withClaim("userId", payload.getUserId())
                 .sign(algorithm);
