@@ -66,16 +66,17 @@ public class SignInController extends BaseController {
         var token = createdToken.getToken();
         var payload = createdToken.getPayload();
 
-        var origin = request.getHeader("origin");
         var userCookie = this.createCookieService.execute(
                 "user",
                 payload.getUserId(),
-                origin != null ? origin : "crud.shop"
+                "localhost"
+//                "crud.shop"
         );
         var authorizationCookie = this.createCookieService.execute(
                 "authorization",
                 token,
-                origin != null ? origin : "crud.shop"
+                "localhost"
+//                "crud.shop"
         );
 
         response.addCookie(userCookie);
