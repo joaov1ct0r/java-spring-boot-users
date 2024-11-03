@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,7 @@ public class SignInController extends BaseController {
             @ApiResponse(responseCode = "500", description = "Erro Interno")
     })
     public ResponseEntity<Object> handle(
+            HttpServletRequest request,
             HttpServletResponse response,
             @Valid @RequestBody SignInDTO credentials
     ) throws Exception {
@@ -64,15 +66,16 @@ public class SignInController extends BaseController {
         var token = createdToken.getToken();
         var payload = createdToken.getPayload();
 
+        var origin = request.getHeader("origin");
         var userCookie = this.createCookieService.execute(
                 "user",
                 payload.getUserId(),
-                "crud.shop"
+                origin != null ? origin : "crud.shop"
         );
         var authorizationCookie = this.createCookieService.execute(
                 "authorization",
                 token,
-                "crud.shop"
+                origin != null ? origin : "crud.shop"
         );
 
         response.addCookie(userCookie);
