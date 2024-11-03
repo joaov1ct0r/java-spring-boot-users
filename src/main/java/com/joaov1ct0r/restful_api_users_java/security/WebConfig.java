@@ -14,7 +14,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // Aplica CORS a todos os endpoints
-                        .allowedOrigins("https://crud.shop", "http://localhost:3000") // Define a origem permitida
+                        .allowedOrigins("https://crud.shop") // Define a origem permitida
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Define os métodos HTTP permitidos
                         .allowCredentials(true); // Permite o envio de cookies
             }
