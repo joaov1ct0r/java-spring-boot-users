@@ -10,9 +10,11 @@ public class CreateCookieService {
         int twoDaysInSeconds = 2 * 24 * 60 * 60; // 2 dias em segundos
         var cookie = new Cookie(cookieName, cookieValue);
         cookie.setDomain(domain);
-        cookie.setHttpOnly(true);
+        cookie.setHttpOnly(false);
+//        cookie.setHttpOnly(true);
         cookie.setPath("/");
-        cookie.setSecure(true);
+        cookie.setSecure(false);
+//        cookie.setSecure(true);
         cookie.setMaxAge(twoDaysInSeconds);
 
         return cookie;
