@@ -88,7 +88,7 @@ public class SignInController extends BaseController {
 
         ResponseDTO responseDTO = this.responseMapper.toDTO(
                 200,
-                "Usuário com id: " + String.valueOf(user.getId()) + "autenticado com sucesso!",
+                "User authenticated with success",
                 user
         );
 

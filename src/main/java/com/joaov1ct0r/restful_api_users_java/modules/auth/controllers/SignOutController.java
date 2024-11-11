@@ -55,7 +55,7 @@ public class SignOutController extends BaseController {
 
         ResponseDTO responseDTO = this.responseMapper.toDTO(
                 200,
-                "Sign out realizado com sucesso",
+                "Sign out success",
                 null
         );
 

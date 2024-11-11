@@ -46,7 +46,7 @@ public class CreateUserController extends BaseController {
 
         ResponseDTO response = this.responseMapper.toDTO(
                 201,
-                "Usuário criado com sucesso!",
+                "User created with success",
                 createdUser
         );
 

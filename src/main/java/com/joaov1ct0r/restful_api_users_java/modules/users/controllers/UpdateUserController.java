@@ -54,7 +54,7 @@ public class UpdateUserController extends BaseController {
 
         ResponseDTO response = this.responseMapper.toDTO(
                 204,
-                "Usuário atualizado com sucesso!",
+                "User updated with success",
                 updatedUser
         );
 

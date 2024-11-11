@@ -53,7 +53,7 @@ public class DeleteUserController extends BaseController {
 
         ResponseDTO response = this.responseMapper.toDTO(
                 204,
-                "Usuário deletado com sucesso!",
+                "User deleted with success",
                 deletedUser
         );
 

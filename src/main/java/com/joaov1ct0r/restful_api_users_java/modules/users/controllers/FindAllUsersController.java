@@ -80,7 +80,7 @@ public class FindAllUsersController extends BaseController {
 
         ResponsePagDTO response = this.responseMapper.toPagDTO(
                 200,
-                "Usuário com id: " + userId + " Buscou todos os usuários com sucesso!",
+                "User(s) found with success",
                 users,
                 query.getPage() - 1,
                 query.getPage() + 1,
