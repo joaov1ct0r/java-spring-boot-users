@@ -59,7 +59,8 @@ public class AuthorizationServiceTest {
                                         username,
                                         "any_email@mail.com",
                                         "any_name",
-                                        "any_password"
+                                        "any_password",
+                                        "any_photo_url"
                                 )
                         )
                 )

@@ -43,21 +43,29 @@ public class CreateUserControllerTest {
 
     @Test
     public void shouldBeAbleToCreateNewUser() throws Exception {
+        UUID userId = UUID.randomUUID();
         var user = new UserEntity(
-                UUID.randomUUID(),
+                userId,
                 faker.name().firstName(),
                 faker.internet().emailAddress(),
                 faker.esports().player(),
                 faker.internet().password(),
+                "any_photo_url",
                 LocalDateTime.now(),
                 null,
                 null
 
         );
 
-        mvc.perform(MockMvcRequestBuilders.post("/signup/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtils.objectToJson(user))
+        var createUserJson = TestUtils.stringToMMF(user);
+
+        mvc.perform(MockMvcRequestBuilders.multipart("/signup/")
+                .file(createUserJson)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .with(request -> {
+                    request.setMethod("POST");
+                    return request;
+                })
         ).andExpect(MockMvcResultMatchers.status().isCreated());
     }
 }

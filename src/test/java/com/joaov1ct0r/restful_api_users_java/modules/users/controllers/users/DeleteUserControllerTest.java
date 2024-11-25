@@ -3,9 +3,9 @@ package com.joaov1ct0r.restful_api_users_java.modules.users.controllers.users;
 import com.github.javafaker.Faker;
 import com.joaov1ct0r.restful_api_users_java.modules.auth.dtos.SignInDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.dtos.ResponseDTO;
-import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.CreateUserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.DeleteUserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UserDTO;
+import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.users.utils.TestUtils;
 import jakarta.servlet.http.Cookie;
 import org.junit.Before;
@@ -21,6 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -46,16 +48,27 @@ public class DeleteUserControllerTest {
 
     @Test
     public void shouldBeAbleToDeleteAUser() throws Exception {
-        var createUserDTO = new CreateUserDTO(
+        UUID userId = UUID.randomUUID();
+        var createUserDTO = new UserEntity(
+                userId,
                 faker.name().username(),
                 faker.internet().emailAddress(),
                 faker.name().firstName(),
-                faker.internet().password()
+                faker.internet().password(),
+                "any_photo_url",
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                null
         );
+        var createUserJson = TestUtils.stringToMMF(createUserDTO);
         var createUserResponse = mvc.perform(
-                MockMvcRequestBuilders.post("/signup/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(TestUtils.objectToJson(createUserDTO))
+                MockMvcRequestBuilders.multipart("/signup/")
+                        .file(createUserJson)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .with(request -> {
+                            request.setMethod("POST");
+                            return request;
+                        })
         ).andReturn().getResponse().getContentAsString();
         ResponseDTO response = TestUtils.jsonToObject(createUserResponse, ResponseDTO.class);
         assert response.getResource() != null;

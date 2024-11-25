@@ -1,14 +1,17 @@
 package com.joaov1ct0r.restful_api_users_java.modules.users.services;
 
 import com.joaov1ct0r.restful_api_users_java.modules.domain.services.BaseService;
+import com.joaov1ct0r.restful_api_users_java.modules.domain.services.S3Service;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.CreateUserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.users.mappers.UserMapper;
 import com.joaov1ct0r.restful_api_users_java.modules.users.repositories.UserRepository;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class CreateUserService extends BaseService {
@@ -18,7 +21,10 @@ public class CreateUserService extends BaseService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserDTO execute(CreateUserDTO user) throws Exception {
+    @Autowired
+    private S3Service s3Service;
+
+    public UserDTO execute(CreateUserDTO user, @Nullable MultipartFile file) throws Exception {
         boolean nameIsInUseByOtherUser = this.userRepository.findByUsername(user.getUsername()).isPresent();
 
         if (nameIsInUseByOtherUser) {
@@ -45,6 +51,13 @@ public class CreateUserService extends BaseService {
         }
 
         user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+
+        boolean fileIsPresent = file != null;
+
+        if (fileIsPresent) {
+            String fileName = this.s3Service.uploadFile(file);
+            user.setPhotoUrl(fileName);
+        }
 
         UserEntity userDTO = UserMapper.toPersistence(user);
 

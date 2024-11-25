@@ -11,6 +11,7 @@ public class UserDTO {
     public LocalDateTime createdAt;
     public LocalDateTime updatedAt;
     public UUID userWhoUpdatedId;
+    public String photoUrl;
 
     public UUID getUserWhoUpdatedId() {
         return userWhoUpdatedId;
@@ -66,5 +67,13 @@ public class UserDTO {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getPhotoUrl() {
+        return this.photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

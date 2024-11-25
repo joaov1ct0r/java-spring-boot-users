@@ -77,40 +77,9 @@ public class UpdateUserServiceTest {
         when(this.userRepository.findById(any())).thenReturn(Optional.empty());
 
         try {
-            this.sut.execute(userDTO, tokenUserId);
+            this.sut.execute(userDTO, tokenUserId, null);
         } catch (Exception e) {
             assertThat(e).isInstanceOf(BadRequestException.class);
-        }
-    }
-
-    @Test
-    @DisplayName("Should not be able to update other users")
-    public void shouldNotBeAbleToUpdateOtherUsers() {
-        var userDTO = new UpdateUserDTO(
-                UUID.randomUUID().toString(),
-                "any_username",
-                "any_email",
-                "any_name",
-                "any_password"
-        );
-        String tokenUserId = UUID.randomUUID().toString();
-        when(this.userRepository.findById(any())).thenReturn(Optional.of(
-                new UserEntity(
-                        UUID.randomUUID(),
-                        "any_other_name",
-                        "any_other_email@mail.com",
-                        "any_other_username",
-                        "any_other_password",
-                        LocalDateTime.now(),
-                        null,
-                        null
-                )
-        ));
-
-        try {
-            this.sut.execute(userDTO, tokenUserId);
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(ForbiddenException.class);
         }
     }
 
@@ -118,20 +87,21 @@ public class UpdateUserServiceTest {
     @DisplayName("Should not be able to update user with unavailable username")
     public void shouldNotBeAbleToUpdateUserWithUnavailableUsername() {
         var userDTO = new UpdateUserDTO(
-                UUID.randomUUID().toString(),
                 "any_username",
                 "any_email",
                 "any_name",
-                "any_password"
+                "any_password",
+                "any_photo_url"
         );
         String tokenUserId = UUID.randomUUID().toString();
         when(this.userRepository.findById(any())).thenReturn(Optional.of(
                 new UserEntity(
-                        UUID.fromString(userDTO.getId()),
+                        UUID.fromString(tokenUserId),
                         userDTO.getName(),
                         userDTO.getEmail(),
                         userDTO.getUsername(),
                         userDTO.getPassword(),
+                        "any_photo_url",
                         LocalDateTime.now(),
                         null,
                         null
@@ -144,6 +114,7 @@ public class UpdateUserServiceTest {
                         "any_other_email@mail.com",
                         "any_other_username",
                         "any_other_password",
+                        "any_photo_url",
                         LocalDateTime.now(),
                         null,
                         null
@@ -151,7 +122,7 @@ public class UpdateUserServiceTest {
         ));
 
         try {
-            this.sut.execute(userDTO, tokenUserId);
+            this.sut.execute(userDTO, tokenUserId, null);
         } catch (Exception e) {
             assertThat(e).isInstanceOf(BadRequestException.class);
         }
@@ -170,11 +141,12 @@ public class UpdateUserServiceTest {
         String tokenUserId = UUID.randomUUID().toString();
        when(this.userRepository.findById(any())).thenReturn(Optional.of(
                 new UserEntity(
-                        UUID.fromString(userDTO.getId()),
+                        UUID.fromString(tokenUserId),
                         userDTO.getName(),
                         userDTO.getEmail(),
                         userDTO.getUsername(),
                         userDTO.getPassword(),
+                        "any_photo_url",
                         LocalDateTime.now(),
                         null,
                         null
@@ -188,6 +160,7 @@ public class UpdateUserServiceTest {
                         "any_other_email@mail.com",
                         "any_other_username",
                         "any_other_password",
+                        "any_photo_url",
                         LocalDateTime.now(),
                         null,
                         null
@@ -195,7 +168,7 @@ public class UpdateUserServiceTest {
         ));
 
         try {
-            this.sut.execute(userDTO, tokenUserId);
+            this.sut.execute(userDTO, tokenUserId, null);
         } catch (Exception e) {
             assertThat(e).isInstanceOf(BadRequestException.class);
         }
@@ -214,11 +187,12 @@ public class UpdateUserServiceTest {
         String tokenUserId = UUID.randomUUID().toString();
        when(this.userRepository.findById(any())).thenReturn(Optional.of(
                 new UserEntity(
-                        UUID.fromString(userDTO.getId()),
+                        UUID.fromString(tokenUserId),
                         userDTO.getName(),
                         userDTO.getEmail(),
                         userDTO.getUsername(),
                         userDTO.getPassword(),
+                        "any_photo_url",
                         LocalDateTime.now(),
                         null,
                         null
@@ -228,19 +202,20 @@ public class UpdateUserServiceTest {
         when(this.userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
         when(this.userRepository.save(any())).thenReturn(
                 new UserEntity(
-                        UUID.fromString(userDTO.getId()),
+                        UUID.fromString(tokenUserId),
                         userDTO.getName(),
                         userDTO.getEmail(),
                         userDTO.getUsername(),
                         userDTO.getPassword(),
+                        "any_photo_url",
                         LocalDateTime.now(),
                         LocalDateTime.now(),
                         null
                 )
         );
 
-        var updatedUser = this.sut.execute(userDTO, tokenUserId);
+        var updatedUser = this.sut.execute(userDTO, tokenUserId, null);
 
-        assertThat(updatedUser.getId()).isEqualTo(UUID.fromString(userDTO.getId()));
+        assertThat(updatedUser.getId()).isEqualTo(UUID.fromString(tokenUserId));
     }
 }

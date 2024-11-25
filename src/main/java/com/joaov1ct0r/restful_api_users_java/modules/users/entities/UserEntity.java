@@ -38,6 +38,9 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @Nullable
+    private String photoUrl;
+
     @Column(nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -69,6 +72,7 @@ public class UserEntity implements UserDetails {
             String email,
             String username,
             String password,
+            String photoUrl,
             LocalDateTime createdAt,
             @Nullable LocalDateTime updatedAt,
             @Nullable UUID userWhoUpdatedId
@@ -78,9 +82,18 @@ public class UserEntity implements UserDetails {
         this.email = email;
         this.username = username;
         this.password = password;
+        this.photoUrl = photoUrl;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.userWhoUpdatedId = userWhoUpdatedId;
+    }
+
+    public String getPhotoUrl() {
+        return this.photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     @Nullable

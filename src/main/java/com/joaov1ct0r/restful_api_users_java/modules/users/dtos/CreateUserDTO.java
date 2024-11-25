@@ -5,6 +5,7 @@ public class CreateUserDTO {
     private String email;
     private String name;
     private String password;
+    private String photoUrl;
 
     public CreateUserDTO() {}
 
@@ -12,12 +13,22 @@ public class CreateUserDTO {
             String username,
             String email,
             String name,
-            String password
+            String password,
+            String photoUrl
     ) {
         this.username = username;
         this.email = email;
         this.name = name;
         this.password = password;
+        this.photoUrl = photoUrl;
+    }
+
+    public String getPhotoUrl() {
+        return this.photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     public String getUsername() {

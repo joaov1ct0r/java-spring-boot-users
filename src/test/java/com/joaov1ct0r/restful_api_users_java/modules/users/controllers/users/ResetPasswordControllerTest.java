@@ -1,11 +1,10 @@
 package com.joaov1ct0r.restful_api_users_java.modules.users.controllers.users;
 
 import com.github.javafaker.Faker;
-import com.joaov1ct0r.restful_api_users_java.modules.auth.dtos.SignInDTO;
-import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.CreateUserDTO;
+import com.joaov1ct0r.restful_api_users_java.modules.domain.dtos.ResponseDTO;
+import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.ResetPasswordDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.users.utils.TestUtils;
-import jakarta.servlet.http.Cookie;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,16 +18,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import static org.assertj.core.api.Assertions.assertThat;
-import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.FindAllUsersDTO;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class FindAllUsersControllerTest {
+public class ResetPasswordControllerTest {
     private MockMvc mvc;
 
     private Faker faker;
@@ -38,17 +35,15 @@ public class FindAllUsersControllerTest {
 
     @Before
     public void setup() {
-        mvc = MockMvcBuilders.webAppContextSetup(context)
-                .apply(SecurityMockMvcConfigurers.springSecurity())
-                .build();
+        this.mvc = MockMvcBuilders.webAppContextSetup(this.context).apply(SecurityMockMvcConfigurers.springSecurity()).build();
 
-        faker = new Faker();
+        this.faker = new Faker();
     }
 
     @Test
-    public void shouldBeAbleToFindAllUsers() throws Exception {
+    public void shouldBeAbleToResetPassword() throws Exception {
         UUID userId = UUID.randomUUID();
-        var createUserDTO = new UserEntity(
+        var user = new UserEntity(
                 userId,
                 faker.name().username(),
                 faker.internet().emailAddress(),
@@ -60,8 +55,8 @@ public class FindAllUsersControllerTest {
                 null
         );
 
-        var createUserJson = TestUtils.stringToMMF(createUserDTO);
-        mvc.perform(
+        var createUserJson = TestUtils.stringToMMF(user);
+        var createUserResponse = mvc.perform(
                 MockMvcRequestBuilders.multipart("/signup/")
                         .file(createUserJson)
                         .contentType(MediaType.MULTIPART_FORM_DATA)
@@ -69,38 +64,23 @@ public class FindAllUsersControllerTest {
                             request.setMethod("POST");
                             return request;
                         })
+        ).andReturn().getResponse().getContentAsString();
+        ResponseDTO response = TestUtils.jsonToObject(createUserResponse, ResponseDTO.class);
+        assert response.getResource() != null;
+        assert response.getStatusCode().equals(201);
+
+        ResetPasswordDTO resetPasswordDTO = new ResetPasswordDTO(user.getEmail());
+        var resetPasswordResponse = mvc.perform(
+                MockMvcRequestBuilders.put("/reset_password/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtils.objectToJson(resetPasswordDTO))
         ).andReturn().getResponse();
 
-        var signInDTO = new SignInDTO(
-                createUserDTO.getUsername(),
-                createUserDTO.getPassword()
-        );
-        Cookie cookieAuthorization = mvc.perform(
-                MockMvcRequestBuilders.post("/signin/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(TestUtils.objectToJson(signInDTO))
-        ).andReturn().getResponse().getCookie("authorization");
+        int resetPasswordResponseStatusCode = resetPasswordResponse.getStatus();
 
-        assert cookieAuthorization != null;
+        System.out.println("teste");
+        System.out.println("string: " + resetPasswordResponse.getContentAsString());
 
-        var findAllUsersDTO = new FindAllUsersDTO(
-                20,
-                1,
-                "any_name",
-                "any_username",
-                "any_email@mail.com"
-        );
-
-        var findAllUsersResponse = mvc.perform(
-                MockMvcRequestBuilders.get("/user/")
-                        .cookie(cookieAuthorization)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(TestUtils.objectToJson(findAllUsersDTO))
-        ).andReturn().getResponse();
-
-        int findAllUsersResponseStatusCode = findAllUsersResponse.getStatus();
-
-        assertThat(findAllUsersResponseStatusCode).isEqualTo(200);
-
+        assertThat(resetPasswordResponseStatusCode).isEqualTo(204);
     }
 }

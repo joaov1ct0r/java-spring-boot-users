@@ -102,6 +102,7 @@ public class DeleteUserServiceTest {
                                "any_email@mail.com",
                                "any_username",
                                "any_password",
+                               "any_photo_url",
                                LocalDateTime.now(),
                                LocalDateTime.now(),
                                null

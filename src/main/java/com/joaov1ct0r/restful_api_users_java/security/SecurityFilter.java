@@ -78,6 +78,8 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (path.equals("/signup/")) return true;
 
+        if (path.equals("/reset_password/")) return true;
+
         return false;
     }
 }

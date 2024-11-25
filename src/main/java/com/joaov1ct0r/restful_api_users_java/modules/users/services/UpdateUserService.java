@@ -1,14 +1,18 @@
 package com.joaov1ct0r.restful_api_users_java.modules.users.services;
 
 import com.joaov1ct0r.restful_api_users_java.modules.domain.services.BaseService;
+import com.joaov1ct0r.restful_api_users_java.modules.domain.services.S3Service;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UpdateUserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.users.mappers.UserMapper;
 import com.joaov1ct0r.restful_api_users_java.modules.users.repositories.UserRepository;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -20,8 +24,11 @@ public class UpdateUserService extends BaseService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserDTO execute(UpdateUserDTO userDTO, String tokenUserId) {
-        var isUserRegistered = this.userRepository.findById(UUID.fromString(userDTO.getId()));
+    @Autowired
+    private S3Service s3Service;
+
+    public UserDTO execute(UpdateUserDTO userDTO, String tokenUserId, @Nullable MultipartFile file) {
+        var isUserRegistered = this.userRepository.findById(UUID.fromString(tokenUserId));
 
         var userWasntFound = isUserRegistered.isEmpty();
 
@@ -33,18 +40,6 @@ public class UpdateUserService extends BaseService {
             );
 
             throw this.badRequestException("Usuário não encontrado!");
-        }
-
-        var isEditingOtherUser = !UUID.fromString(userDTO.getId()).equals(isUserRegistered.get().getId());
-
-        if (isEditingOtherUser) {
-            this.generateErrorLog(
-                    UUID.fromString(tokenUserId),
-                    403,
-                    "Usuário com id: " + tokenUserId + " tentou editar usuário com id: " + userDTO.getId()
-            );
-
-            throw this.forbiddenException("Não permitido!");
         }
 
         var isUsernameInUseByOtherUser = this.userRepository.findByUsername(userDTO.getUsername());
@@ -83,6 +78,13 @@ public class UpdateUserService extends BaseService {
 
         if (shouldUpdatePassword) {
             userToUpdate.setPassword(this.passwordEncoder.encode(userDTO.getPassword()));
+        }
+
+        boolean fileIsPresent = file != null;
+
+        if (fileIsPresent) {
+            String fileName = this.s3Service.uploadFile(file);
+            userToUpdate.setPhotoUrl(fileName);
         }
 
         userToUpdate.setName(userDTO.getName());

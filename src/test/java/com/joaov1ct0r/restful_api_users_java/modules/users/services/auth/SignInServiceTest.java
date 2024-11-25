@@ -82,7 +82,8 @@ public class SignInServiceTest {
                                    user.getUsername(),
                                    "any_email",
                                    "any_name",
-                                   user.getPassword()
+                                   user.getPassword(),
+                                   "any_photo_url"
                            )
                    )
            ));
@@ -104,7 +105,8 @@ public class SignInServiceTest {
                                 user.getUsername(),
                                 "any_email",
                                 "any_name",
-                                user.getPassword()
+                                user.getPassword(),
+                                "any_photo_url"
                         )
                 )
         ));

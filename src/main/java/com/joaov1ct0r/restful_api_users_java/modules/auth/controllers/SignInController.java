@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,6 +42,9 @@ public class SignInController extends BaseController {
     @Autowired
     private CreateCookieService createCookieService;
 
+    @Value("${SPRING_PROFILES_ACTIVE:prod}")
+    private String env;
+
     @PostMapping("/")
     @Operation(summary = "Sign in", description = "É possivel realizar o sign in de um usuário já cadastrado!")
     @ApiResponses({
@@ -59,7 +63,7 @@ public class SignInController extends BaseController {
         UserDTO user = this.signInService.execute(credentials);
 
         var usernameAndPassword = new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword());
-        var auth = this.authenticationManager.authenticate(usernameAndPassword);
+        this.authenticationManager.authenticate(usernameAndPassword);
 
         var createdToken = this.createJWTTokenService.execute(user.getId().toString());
 
@@ -69,12 +73,12 @@ public class SignInController extends BaseController {
         var userCookie = this.createCookieService.execute(
                 "user",
                 payload.getUserId(),
-                "crud.shop"
+                this.env.equals("prod") ? "crud.shop" : "localhost"
         );
         var authorizationCookie = this.createCookieService.execute(
                 "authorization",
                 token,
-                "crud.shop"
+                this.env.equals("prod") ? "crud.shop" : "localhost"
         );
 
         response.addCookie(userCookie);
@@ -83,7 +87,7 @@ public class SignInController extends BaseController {
         this.generateEventLog(
                 user.getId(),
                 200,
-                "Usuário com id:" + String.valueOf(user.getId()) + " autenticado com sucesso!"
+                "Usuário com id:" + user.getId() + " autenticado com sucesso!"
         );
 
         ResponseDTO responseDTO = this.responseMapper.toDTO(

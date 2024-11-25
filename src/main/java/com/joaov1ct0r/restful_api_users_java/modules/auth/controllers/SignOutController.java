@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,10 @@ import java.util.UUID;
 @RequestMapping("/signout/")
 @Tag(name = "Auth")
 public class SignOutController extends BaseController {
+
+    @Value("${SPRING_PROFILES_ACTIVE:prod}")
+    private String env;
+
     @GetMapping("/")
     @Operation(summary = "Sign out", description = "É possivel realizar o sign out de um usuário já cadastrado!")
     @ApiResponses({
@@ -40,6 +45,10 @@ public class SignOutController extends BaseController {
 
         Cookie cookie = new Cookie("authorization", null);
         cookie.setDomain("localhost");
+
+        if (this.env.equals("prod")) {
+            cookie.setDomain("crud.shop");
+        }
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         cookie.setMaxAge(0);

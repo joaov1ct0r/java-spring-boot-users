@@ -67,7 +67,8 @@ public class CreateUserServiceTest {
                     "any_name",
                     "any_email@mail.com",
                     "any_username",
-                    "any_password"
+                    "any_password",
+                    "any_photo_url"
             );
             when(this.userRepository.findByUsername(anyString())).thenReturn(Optional.of(new UserEntity(
                     UUID.randomUUID(),
@@ -75,12 +76,13 @@ public class CreateUserServiceTest {
                     "any_other_email@mail.com",
                     "any_username",
                     "any_password",
+                    "any_photo_url",
                     LocalDateTime.now(),
                     null,
                     null
             )));
 
-            this.sut.execute(user);
+            this.sut.execute(user, null);
         } catch (Exception e) {
             assertThat(e).isInstanceOf(BadRequestException.class);
         }
@@ -94,7 +96,8 @@ public class CreateUserServiceTest {
                     "any_name",
                     "any_email@mail.com",
                     "any_username",
-                    "any_password"
+                    "any_password",
+                    "any_photo_url"
             );
             when(this.userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
             when(this.userRepository.findByEmail(anyString())).thenReturn(Optional.of(new UserEntity(
@@ -103,12 +106,13 @@ public class CreateUserServiceTest {
                     "any_other_email@mail.com",
                     "any_other_username",
                     "any_other_password",
+                    "any_photo_url",
                     LocalDateTime.now(),
                     null,
                     null
             )));
 
-            this.sut.execute(user);
+            this.sut.execute(user, null);
         } catch (Exception e) {
             assertThat(e).isInstanceOf(BadRequestException.class);
         }
@@ -121,7 +125,8 @@ public class CreateUserServiceTest {
                "any_name",
                "any_email@mail.com",
                "any_username",
-               "any_password"
+               "any_password",
+               "any_photo_url"
        );
        when(this.userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
        when(this.userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
@@ -130,7 +135,7 @@ public class CreateUserServiceTest {
                UserMapper.toPersistence(user)
        );
 
-       var createdUser = this.sut.execute(user);
+       var createdUser = this.sut.execute(user, null);
 
        assertThat(createdUser).hasFieldOrProperty("id");
     }

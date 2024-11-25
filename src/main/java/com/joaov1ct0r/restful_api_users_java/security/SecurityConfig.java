@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/signin/").permitAll()
                         .requestMatchers(HttpMethod.POST, "/signup/").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/reset_password/").permitAll()
                         .requestMatchers(PERMIT_ALL_LIST).permitAll()
                         .requestMatchers(HttpMethod.GET, "/signout/").hasRole("USER")
                         .anyRequest().authenticated()
