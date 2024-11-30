@@ -39,7 +39,7 @@ public class CreateUserController extends BaseController {
             @ApiResponse(responseCode = "400", description = "Erro da requisição (email e ou username não disponivel)"),
             @ApiResponse(responseCode = "500", description = "Erro Interno"),
     })
-    public ResponseEntity<Object> handle(@RequestPart("user") @Valid CreateUserDTO user, @Nullable @RequestParam("file")MultipartFile file) throws Exception {
+    public ResponseEntity<Object> handle(@RequestPart("user") @Valid CreateUserDTO user, @Nullable @RequestPart("file")MultipartFile file) throws Exception {
         UserDTO createdUser = this.createUserService.execute(user, file);
 
         ResponseDTO response = this.responseMapper.toDTO(
