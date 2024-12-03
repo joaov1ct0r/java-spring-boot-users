@@ -2,6 +2,7 @@ package com.joaov1ct0r.restful_api_users_java.modules.users.services;
 
 import com.joaov1ct0r.restful_api_users_java.modules.domain.services.BaseService;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.services.EmailService;
+import com.joaov1ct0r.restful_api_users_java.modules.domain.services.Generator;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.ResetPasswordDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ public class ResetPasswordService extends BaseService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private Generator generator;
 
     public void execute(ResetPasswordDTO resetPasswordDTO) throws Exception {
         var isUserRegistered = this.userRepository.findByEmail(resetPasswordDTO.getEmail());
@@ -36,7 +40,7 @@ public class ResetPasswordService extends BaseService {
         this.emailService.sendMail(
                 userToUpdate.getEmail(),
                 "Password Updated",
-                "Your new password is: 123456"
+                "Your new password is: " + this.generator.generateRandomPassword(9)
         );
     }
 }

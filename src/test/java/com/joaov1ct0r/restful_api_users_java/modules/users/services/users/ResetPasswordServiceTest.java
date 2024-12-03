@@ -3,6 +3,7 @@ package com.joaov1ct0r.restful_api_users_java.modules.users.services.users;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.entities.ErrorLogEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.repositories.ErrorLogsRepository;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.services.EmailService;
+import com.joaov1ct0r.restful_api_users_java.modules.domain.services.Generator;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.ResetPasswordDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.users.repositories.UserRepository;
@@ -40,11 +41,15 @@ public class ResetPasswordServiceTest {
     @Mock
     private ErrorLogsRepository errorLogsRepository;
 
+    @Mock
+    private Generator generator;
+
     @BeforeEach
     public void beforeEachSetUp() {
         Mockito.reset(this.userRepository);
         Mockito.reset(this.emailService);
         Mockito.reset(this.errorLogsRepository);
+        Mockito.reset(this.generator);
         Mockito.when(this.errorLogsRepository.save(any())).thenReturn(new ErrorLogEntity(
                 UUID.randomUUID(),
                 UUID.randomUUID(),
@@ -85,6 +90,8 @@ public class ResetPasswordServiceTest {
                         null
                 )
         ));
+
+        Mockito.when(this.generator.generateRandomPassword(9)).thenReturn("any_generated_string");
 
         try {
             this.sut.execute(resetPasswordDTO);
