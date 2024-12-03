@@ -35,12 +35,13 @@ public class ResetPasswordService extends BaseService {
         }
 
         var userToUpdate = isUserRegistered.get();
-        userToUpdate.setPassword("123456");
+        String newUserPassword = this.generator.generateRandomPassword(9);
+        userToUpdate.setPassword(newUserPassword);
         this.userRepository.save(userToUpdate);
         this.emailService.sendMail(
                 userToUpdate.getEmail(),
                 "Password Updated",
-                "Your new password is: " + this.generator.generateRandomPassword(9)
+                "Your new password is: " + newUserPassword
         );
     }
 }
