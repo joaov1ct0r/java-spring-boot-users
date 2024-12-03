@@ -38,6 +38,7 @@ public class ResetPasswordService extends BaseService {
         String newUserPassword = this.generator.generateRandomPassword(9);
         userToUpdate.setPassword(newUserPassword);
         this.userRepository.save(userToUpdate);
+
         this.emailService.sendMail(
                 userToUpdate.getEmail(),
                 "Password Updated",
