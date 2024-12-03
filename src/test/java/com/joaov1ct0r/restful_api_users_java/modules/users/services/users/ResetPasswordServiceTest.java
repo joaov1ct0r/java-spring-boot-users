@@ -19,12 +19,13 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
-
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyString;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -44,11 +45,15 @@ public class ResetPasswordServiceTest {
     @Mock
     private Generator generator;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @BeforeEach
     public void beforeEachSetUp() {
         Mockito.reset(this.userRepository);
         Mockito.reset(this.emailService);
         Mockito.reset(this.errorLogsRepository);
+        Mockito.reset(this.passwordEncoder);
         Mockito.reset(this.generator);
         Mockito.when(this.errorLogsRepository.save(any())).thenReturn(new ErrorLogEntity(
                 UUID.randomUUID(),
@@ -92,6 +97,7 @@ public class ResetPasswordServiceTest {
         ));
 
         Mockito.when(this.generator.generateRandomPassword(9)).thenReturn("any_generated_string");
+        Mockito.when(this.passwordEncoder.encode(anyString())).thenReturn("any_password");
 
         try {
             this.sut.execute(resetPasswordDTO);

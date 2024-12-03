@@ -5,6 +5,7 @@ import com.joaov1ct0r.restful_api_users_java.modules.domain.entities.EventLogEnt
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -26,16 +27,20 @@ public class UserEntity implements UserDetails {
 
     @Column(nullable = false)
     @Pattern(regexp = "\\S+", message = "O campo [username] não deve conter espaço")
+    @NotBlank(message = "Username must not be blank")
     private String username;
 
-    @Email
+    @Email(message = "Email format is not valid")
+    @NotBlank(message = "Email must not be blank")
     @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
+    @NotBlank(message = "Name must not be blank")
     private String name;
 
     @Column(nullable = false)
+    @NotBlank(message = "Password must not be blank")
     private String password;
 
     @Nullable
