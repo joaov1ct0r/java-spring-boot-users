@@ -23,7 +23,7 @@ public class CorsConfig {
         source.registerCorsConfiguration("/**", config);
 
         if (this.env.equals("dev")) {
-            config.addAllowedOrigin("http://localhost");
+            config.addAllowedOrigin("http://localhost:3000");
         }
         return new CorsFilter(source);
     }
