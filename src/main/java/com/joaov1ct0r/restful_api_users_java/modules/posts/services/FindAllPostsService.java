@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class FindAllUsersService extends BaseService {
+public class FindAllPostsService extends BaseService {
     @Autowired
     private PostRepository postRepository;
 

@@ -2,6 +2,7 @@ package com.joaov1ct0r.restful_api_users_java.modules.users.entities;
 
 import com.joaov1ct0r.restful_api_users_java.modules.domain.entities.ErrorLogEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.entities.EventLogEntity;
+import com.joaov1ct0r.restful_api_users_java.modules.posts.entities.PostEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -63,11 +64,14 @@ public class UserEntity implements UserDetails {
     @JoinColumn(name = "userWhoUpdatedId", insertable = false, updatable = false)
     private UserEntity userWhoUpdated;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "id")
     private List<ErrorLogEntity> errorLogs;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "id")
     private List<EventLogEntity> eventLogs;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "id")
+    private List<PostEntity> posts;
 
     public UserEntity() {}
 

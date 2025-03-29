@@ -2,6 +2,7 @@ package com.joaov1ct0r.restful_api_users_java.modules.posts.entities;
 
 import com.joaov1ct0r.restful_api_users_java.modules.domain.entities.ErrorLogEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.entities.EventLogEntity;
+import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -31,17 +32,17 @@ public class PostEntity {
     private LocalDateTime updatedAt;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "userWhoCreatedId", insertable = false, updatable = false)
-    private UUID userWhoCreatedId;
+    @JoinColumn(name = "id", insertable = false, updatable = false)
+    private UserEntity userWhoCreatedId;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "userWhoUpdatedId", insertable = false, updatable = false)
-    private UUID userWhoUpdatedId;
+    @JoinColumn(name = "id", insertable = false, updatable = false)
+    private UserEntity userWhoUpdatedId;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "post")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "id")
     private List<ErrorLogEntity> errorLogs;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "post")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "id")
     private List<EventLogEntity> eventLogs;
 
     public PostEntity() {}
@@ -51,14 +52,62 @@ public class PostEntity {
             String content,
             LocalDateTime createdAt,
             @Nullable LocalDateTime updatedAt,
-            UUID userWhoCreatedId,
-            @Nullable UUID userWhoUpdatedId
+            UserEntity userWhoCreatedId,
+            @Nullable UserEntity userWhoUpdatedId
     ) {
         this.id = id;
         this.content = content;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.userWhoCreatedId = userWhoCreatedId;
+        this.userWhoUpdatedId = userWhoUpdatedId;
+    }
+
+    public UUID getId() {
+        return this.id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getContent() {
+        return this.content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return this.createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return this.updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public UserEntity getUserWhoCreatedId() {
+        return this.userWhoCreatedId;
+    }
+
+    public void setUserWhoCreatedId(UserEntity userWhoCreatedId) {
+        this.userWhoCreatedId = userWhoCreatedId;
+    }
+
+    public UserEntity getUserWhoUpdatedId() {
+        return this.userWhoUpdatedId;
+    }
+
+    public void setUserWhoUpdatedId(UserEntity userWhoUpdatedId) {
         this.userWhoUpdatedId = userWhoUpdatedId;
     }
 }
