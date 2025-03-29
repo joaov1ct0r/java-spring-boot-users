@@ -1,7 +1,8 @@
-package com.joaov1ct0r.restful_api_users_java.modules.users.controllers.users;
+package com.joaov1ct0r.restful_api_users_java.modules.users.controllers.posts;
 
 import com.github.javafaker.Faker;
 import com.joaov1ct0r.restful_api_users_java.modules.auth.dtos.SignInDTO;
+import com.joaov1ct0r.restful_api_users_java.modules.posts.dtos.FindAllPostsDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.users.utils.TestUtils;
 import jakarta.servlet.http.Cookie;
@@ -19,14 +20,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import static org.assertj.core.api.Assertions.assertThat;
-import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.FindAllUsersDTO;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class FindAllUsersControllerTest {
+public class FindAllPostsControllerTest {
     private MockMvc mvc;
 
     private Faker faker;
@@ -44,7 +44,7 @@ public class FindAllUsersControllerTest {
     }
 
     @Test
-    public void shouldBeAbleToFindAllUsers() throws Exception {
+    public void shouldBeAbleToFindAllPosts() throws Exception {
         UUID userId = UUID.randomUUID();
         var createUserDTO = new UserEntity(
                 userId,
@@ -81,24 +81,21 @@ public class FindAllUsersControllerTest {
 
         assert cookieAuthorization != null;
 
-        var findAllUsersDTO = new FindAllUsersDTO(
+        FindAllPostsDTO findAllPostsDTO = new FindAllPostsDTO(
                 20,
                 1,
-                "any_name",
-                "any_username",
-                "any_email@mail.com"
+                "any_content"
         );
 
-        var findAllUsersResponse = mvc.perform(
-                MockMvcRequestBuilders.get("/user/")
+        var findAllPostsResponse = mvc.perform(
+                MockMvcRequestBuilders.get("/post/")
                         .cookie(cookieAuthorization)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(TestUtils.objectToJson(findAllUsersDTO))
+                        .content(TestUtils.objectToJson(findAllPostsDTO))
         ).andReturn().getResponse();
 
-        int findAllUsersResponseStatusCode = findAllUsersResponse.getStatus();
+        int findAllPostsResponseStatusCode = findAllPostsResponse.getStatus();
 
-        assertThat(findAllUsersResponseStatusCode).isEqualTo(200);
-
+        assertThat(findAllPostsResponseStatusCode).isEqualTo(200);
     }
 }
