@@ -31,13 +31,20 @@ public class PostEntity {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id", insertable = false, updatable = false)
-    private UserEntity userWhoCreatedId;
+    @Column(nullable = false)
+    @NotBlank(message = "User who created id must not be blank")
+    private UUID userWhoCreatedId;
+
+    @Column(nullable = true)
+    private UUID userWhoUpdatedId;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id", insertable = false, updatable = false)
-    private UserEntity userWhoUpdatedId;
+    @JoinColumn(name = "userWhoCreatedId", insertable = false, updatable = false, referencedColumnName = "id")
+    private UserEntity userWhoCreated;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "userWhoUpdatedId", insertable = false, updatable = false)
+    private UserEntity userWhoUpdated;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "id")
     private List<ErrorLogEntity> errorLogs;
@@ -52,8 +59,8 @@ public class PostEntity {
             String content,
             LocalDateTime createdAt,
             @Nullable LocalDateTime updatedAt,
-            UserEntity userWhoCreatedId,
-            @Nullable UserEntity userWhoUpdatedId
+            UUID userWhoCreatedId,
+            @Nullable UUID userWhoUpdatedId
     ) {
         this.id = id;
         this.content = content;
@@ -95,19 +102,27 @@ public class PostEntity {
         this.updatedAt = updatedAt;
     }
 
-    public UserEntity getUserWhoCreatedId() {
+    public UUID getUserWhoCreatedId() {
         return this.userWhoCreatedId;
     }
 
-    public void setUserWhoCreatedId(UserEntity userWhoCreatedId) {
+    public void setUserWhoCreatedId(UUID userWhoCreatedId) {
         this.userWhoCreatedId = userWhoCreatedId;
     }
 
-    public UserEntity getUserWhoUpdatedId() {
+    public UUID getUserWhoUpdatedId() {
         return this.userWhoUpdatedId;
     }
 
-    public void setUserWhoUpdatedId(UserEntity userWhoUpdatedId) {
+    public void setUserWhoUpdatedId(UUID userWhoUpdatedId) {
         this.userWhoUpdatedId = userWhoUpdatedId;
+    }
+
+    public UserEntity getUserWhoCreated() {
+        return this.userWhoCreated;
+    }
+
+    public UserEntity getUserWhoUpdated() {
+        return this.userWhoUpdated;
     }
 }

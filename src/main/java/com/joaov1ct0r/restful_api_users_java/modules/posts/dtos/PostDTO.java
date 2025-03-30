@@ -10,8 +10,8 @@ public class PostDTO {
     public String content;
     public LocalDateTime createdAt;
     public LocalDateTime updatedAt;
-    public UserEntity userWhoCreatedId;
-    public UserEntity userWhoUpdatedId;
+    public UUID userWhoCreatedId;
+    public UUID userWhoUpdatedId;
 
     public UUID getId() {
         return this.id;
@@ -45,19 +45,19 @@ public class PostDTO {
         this.updatedAt = updatedAt;
     }
 
-    public UserEntity getUserWhoCreatedId() {
+    public UUID getUserWhoCreatedId() {
         return this.userWhoCreatedId;
     }
 
-    public void setUserWhoCreatedId(UserEntity userWhoCreatedId) {
+    public void setUserWhoCreatedId(UUID userWhoCreatedId) {
         this.userWhoCreatedId = userWhoCreatedId;
     }
 
-    public UserEntity getUserWhoUpdatedId() {
+    public UUID getUserWhoUpdatedId() {
         return this.userWhoUpdatedId;
     }
 
-    public void setUserWhoUpdatedId(UserEntity userWhoUpdatedId) {
+    public void setUserWhoUpdatedId(UUID userWhoUpdatedId) {
         this.userWhoUpdatedId = userWhoUpdatedId;
     }
 }

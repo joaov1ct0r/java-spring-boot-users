@@ -61,16 +61,16 @@ public class UserEntity implements UserDetails {
     private UUID userWhoUpdatedId;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "userWhoUpdatedId", insertable = false, updatable = false)
+    @JoinColumn(name = "userWhoUpdatedId", insertable = true, updatable = true, referencedColumnName = "id")
     private UserEntity userWhoUpdated;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "id")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<ErrorLogEntity> errorLogs;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "id")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<EventLogEntity> eventLogs;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "id")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<PostEntity> posts;
 
     public UserEntity() {}
@@ -194,5 +194,9 @@ public class UserEntity implements UserDetails {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public List<PostEntity> getPosts() {
+        return this.posts;
     }
 }

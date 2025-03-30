@@ -7,7 +7,6 @@ import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.users.mappers.UserMapper;
 import org.springframework.mock.web.MockMultipartFile;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
