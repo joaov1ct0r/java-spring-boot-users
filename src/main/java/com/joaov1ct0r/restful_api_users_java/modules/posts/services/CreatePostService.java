@@ -8,6 +8,7 @@ import com.joaov1ct0r.restful_api_users_java.modules.posts.mappers.PostMapper;
 import com.joaov1ct0r.restful_api_users_java.modules.posts.repositories.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.UUID;
 
 @Service
@@ -16,13 +17,9 @@ public class CreatePostService extends BaseService {
     private PostRepository postRepository;
 
     public PostDTO execute(CreatePostDTO post, UUID userId) throws Exception {
-        PostEntity postDTO = PostMapper.toPersistence(
-                post,
-                userId
-        );
+        PostEntity postDTO = PostMapper.toPersistence(post, userId);
 
-        PostEntity postPersistence = this.postRepository.save(postDTO);
-
-        return PostMapper.toDTO(postPersistence);
+        PostEntity createdPost = this.postRepository.save(postDTO);
+        return PostMapper.toDTO(createdPost);
     }
 }

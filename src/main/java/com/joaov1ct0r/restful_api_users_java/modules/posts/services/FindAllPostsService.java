@@ -19,12 +19,21 @@ public class FindAllPostsService extends BaseService {
     private PostRepository postRepository;
 
     public List<PostDTO> execute(FindAllPostsDTO query) {
+        boolean isQuery = query.getContent() != null;
+
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         PageRequest page = PageRequest.of(query.getPage() - 1, query.getPerPage(), sort);
-        Page<PostEntity> posts = this.postRepository.findAllByContentContaining(
-                query.getContent(),
-                page
-        );
+        Page<PostEntity> posts;
+
+        if (isQuery) {
+            posts = this.postRepository.findAllByContentContaining(
+                    query.getContent(),
+                    page
+            );
+
+        } else {
+            posts = this.postRepository.findAll(page);
+        }
 
         return posts.stream().map(PostMapper::toDTO).toList();
     };
