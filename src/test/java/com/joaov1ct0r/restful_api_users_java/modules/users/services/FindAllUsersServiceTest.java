@@ -1,8 +1,8 @@
-package com.joaov1ct0r.restful_api_users_java.modules.users.services.users;
+package com.joaov1ct0r.restful_api_users_java.modules.users.services;
 
-import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.CountAllUsersDTO;
+import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.FindAllUsersDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.repositories.UserRepository;
-import com.joaov1ct0r.restful_api_users_java.modules.users.services.CountAllUsersService;
+import com.joaov1ct0r.restful_api_users_java.modules.users.services.FindAllUsersService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,15 +18,15 @@ import org.springframework.data.domain.PageRequest;
 import java.util.Collections;
 import static org.mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.any;
 
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class CountAllUsersServiceTest {
+public class FindAllUsersServiceTest {
     @InjectMocks
-    private CountAllUsersService sut;
+    private FindAllUsersService sut;
 
     @Mock
     private UserRepository userRepository;
@@ -37,17 +37,17 @@ public class CountAllUsersServiceTest {
     }
 
     @Test
-    @DisplayName("Should be able to count all users")
-    public void shouldBeAbleToCountAllUsers() {
-        var query = new CountAllUsersDTO(
+    @DisplayName("Should be able to get all users")
+    public void shouldBeAbleToGetAllUsers() {
+        var query = new FindAllUsersDTO(
                 20,
-                2,
+                1,
                 "any_name",
                 "any_username",
                 "any_email@mail.com"
         );
         when(
-                this.userRepository.countByNameContainingAndUsernameContainingAndEmailContaining(
+                this.userRepository.findAllByNameContainingAndUsernameContainingAndEmailContaining(
                         anyString(),
                         anyString(),
                         anyString(),
@@ -55,8 +55,8 @@ public class CountAllUsersServiceTest {
                 )
         ).thenReturn(new PageImpl<>(Collections.emptyList()));
 
-        var usersCount = this.sut.execute(query);
+       var users = this.sut.execute(query);
 
-        assertThat(usersCount).isEqualTo(0);
+       assertThat(users.isEmpty()).isEqualTo(true);
     }
 }

@@ -3,6 +3,7 @@ package com.joaov1ct0r.restful_api_users_java.modules.posts.mappers;
 import com.joaov1ct0r.restful_api_users_java.modules.posts.dtos.CreatePostDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.posts.dtos.PostDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.posts.entities.PostEntity;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -14,7 +15,6 @@ public class PostMapper {
         postDTO.setCreatedAt(post.getCreatedAt());
         postDTO.setUpdatedAt(post.getUpdatedAt());
         postDTO.setUserWhoCreatedId(post.getUserWhoCreatedId());
-        postDTO.setUserWhoUpdatedId(post.getUserWhoUpdatedId());
         return postDTO;
     }
 
@@ -24,8 +24,7 @@ public class PostMapper {
                 postDTO.getContent(),
                 LocalDateTime.now(),
                 null,
-                userWhoCreatedId,
-                null
+                userWhoCreatedId
         );
     }
 }

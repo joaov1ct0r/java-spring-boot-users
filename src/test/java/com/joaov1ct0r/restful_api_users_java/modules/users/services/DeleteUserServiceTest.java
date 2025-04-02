@@ -1,4 +1,4 @@
-package com.joaov1ct0r.restful_api_users_java.modules.users.services.users;
+package com.joaov1ct0r.restful_api_users_java.modules.users.services;
 
 import com.joaov1ct0r.restful_api_users_java.modules.domain.entities.ErrorLogEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.exceptions.BadRequestException;
@@ -103,7 +103,6 @@ public class DeleteUserServiceTest {
                                "any_username",
                                "any_password",
                                "any_photo_url",
-                               LocalDateTime.now(),
                                LocalDateTime.now(),
                                null
                        )

@@ -39,25 +39,25 @@ public class CreatePostController extends BaseController {
     })
     public ResponseEntity<Object> handle(
             HttpServletRequest req,
-            @Valid CreatePostDTO post
+            @RequestBody @Valid CreatePostDTO post
             ) throws Exception {
-        Object userIdAtt = req.getAttribute("userId");
-        UUID userId = UUID.fromString(userIdAtt.toString());
+            Object userIdAtt = req.getAttribute("userId");
+            UUID userId = UUID.fromString(userIdAtt.toString());
 
-        PostDTO createdPost = this.createPostService.execute(post, userId);
+            PostDTO createdPost = this.createPostService.execute(post, userId);
 
-        ResponseDTO response = this.responseMapper.toDTO(
-                201,
-                "Post created with success!",
-                post
-        );
+            ResponseDTO response = this.responseMapper.toDTO(
+                    201,
+                    "Post created with success!",
+                    createdPost
+            );
 
-        this.generateEventLog(
-                userId,
-                201,
-                "Usuário com id: " + userId + " criou um post com sucesso!"
-        );
+            this.generateEventLog(
+                    userId,
+                    201,
+                    "Usuário com id: " + userId + " criou um post com sucesso!"
+            );
 
-        return ResponseEntity.status(201).body(response);
+            return ResponseEntity.status(201).body(response);
     }
 }

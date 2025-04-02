@@ -16,7 +16,6 @@ public class UserMapper {
         userDTO.setName(user.getName());
         userDTO.setCreatedAt(user.getCreatedAt());
         userDTO.setUpdatedAt(user.getUpdatedAt());
-        userDTO.setUserWhoUpdatedId(user.getUserWhoUpdatedId());
         userDTO.setPhotoUrl(user.getPhotoUrl());
         return userDTO;
     }
@@ -30,7 +29,6 @@ public class UserMapper {
                 user.getPassword(),
                 user.getPhotoUrl(),
                 LocalDateTime.now(),
-                null,
                 null
         );
     }

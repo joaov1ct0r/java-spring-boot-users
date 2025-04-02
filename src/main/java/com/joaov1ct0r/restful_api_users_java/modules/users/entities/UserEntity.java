@@ -56,21 +56,13 @@ public class UserEntity implements UserDetails {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @Column(nullable = true)
-    @Nullable
-    private UUID userWhoUpdatedId;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "userWhoUpdatedId", insertable = true, updatable = true, referencedColumnName = "id")
-    private UserEntity userWhoUpdated;
-
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<ErrorLogEntity> errorLogs;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<EventLogEntity> eventLogs;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "userWhoCreated")
     private List<PostEntity> posts;
 
     public UserEntity() {}
@@ -81,10 +73,9 @@ public class UserEntity implements UserDetails {
             String email,
             String username,
             String password,
-            String photoUrl,
+            @Nullable String photoUrl,
             LocalDateTime createdAt,
-            @Nullable LocalDateTime updatedAt,
-            @Nullable UUID userWhoUpdatedId
+            @Nullable LocalDateTime updatedAt
     ) {
         this.id = id;
         this.name = name;
@@ -94,24 +85,15 @@ public class UserEntity implements UserDetails {
         this.photoUrl = photoUrl;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.userWhoUpdatedId = userWhoUpdatedId;
     }
 
+    @Nullable
     public String getPhotoUrl() {
         return this.photoUrl;
     }
 
-    public void setPhotoUrl(String photoUrl) {
+    public void setPhotoUrl(@Nullable String photoUrl) {
         this.photoUrl = photoUrl;
-    }
-
-    @Nullable
-    public UUID getUserWhoUpdatedId() {
-        return userWhoUpdatedId;
-    }
-
-    public void setUserWhoUpdatedId(@Nullable UUID userWhoUpdatedId) {
-        this.userWhoUpdatedId = userWhoUpdatedId;
     }
 
     @Nullable
@@ -196,7 +178,7 @@ public class UserEntity implements UserDetails {
         this.id = id;
     }
 
-    public List<PostEntity> getPosts() {
-        return this.posts;
-    }
+//    public List<PostEntity> getPosts() {
+//        return this.posts;
+//    }
 }

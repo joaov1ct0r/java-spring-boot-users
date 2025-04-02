@@ -1,4 +1,4 @@
-package com.joaov1ct0r.restful_api_users_java.modules.users.services.posts;
+package com.joaov1ct0r.restful_api_users_java.modules.posts.services;
 
 import com.joaov1ct0r.restful_api_users_java.modules.posts.dtos.FindAllPostsDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.posts.dtos.PostDTO;

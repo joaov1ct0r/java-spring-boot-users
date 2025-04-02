@@ -1,13 +1,9 @@
-package com.joaov1ct0r.restful_api_users_java.modules.users.controllers.users;
+package com.joaov1ct0r.restful_api_users_java.modules.auth.controllers;
 
 import com.github.javafaker.Faker;
 import com.joaov1ct0r.restful_api_users_java.modules.auth.dtos.SignInDTO;
-import com.joaov1ct0r.restful_api_users_java.modules.domain.dtos.ResponseDTO;
-import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.CreateUserDTO;
-import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UpdateUserDTO;
-import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
-import com.joaov1ct0r.restful_api_users_java.modules.users.utils.TestUtils;
+import com.joaov1ct0r.restful_api_users_java.modules.utils.TestUtils;
 import jakarta.servlet.http.Cookie;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,16 +19,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class UpdateUserControllerTest {
+public class SignOutControllerTest {
     private MockMvc mvc;
 
     private Faker faker;
@@ -50,9 +44,9 @@ public class UpdateUserControllerTest {
     }
 
     @Test
-    public void shouldBeAbleToUpdateAUser() throws Exception {
+    public void shouldBeAbleToSignOut() throws Exception {
         UUID userId = UUID.randomUUID();
-        var user = new UserEntity(
+        var createUserDTO = new UserEntity(
                 userId,
                 faker.name().username(),
                 faker.internet().emailAddress(),
@@ -60,12 +54,10 @@ public class UpdateUserControllerTest {
                 faker.internet().password(),
                 "any_photo_url",
                 LocalDateTime.now(),
-                LocalDateTime.now(),
                 null
         );
-
-        var createUserJson = TestUtils.stringToMMF(user);
-        var createUserResponse = mvc.perform(
+        MockMultipartFile createUserJson = TestUtils.stringToMMF(createUserDTO);
+        mvc.perform(
                 MockMvcRequestBuilders.multipart("/signup/")
                         .file(createUserJson)
                         .contentType(MediaType.MULTIPART_FORM_DATA)
@@ -73,15 +65,10 @@ public class UpdateUserControllerTest {
                             request.setMethod("POST");
                             return request;
                         })
-        ).andReturn().getResponse().getContentAsString();
-        ResponseDTO response = TestUtils.jsonToObject(createUserResponse, ResponseDTO.class);
-        assert response.getResource() != null;
-        assert response.getStatusCode().equals(201);
-        UserDTO userDTO = TestUtils.jsonToUserDTO(response.getResource().toString(), UserDTO.class);
-
+        ).andReturn();
         var signInDTO = new SignInDTO(
-                user.getUsername(),
-                user.getPassword()
+                createUserDTO.getUsername(),
+                createUserDTO.getPassword()
         );
         Cookie cookieAuthorization = mvc.perform(
                 MockMvcRequestBuilders.post("/signin/")
@@ -91,27 +78,15 @@ public class UpdateUserControllerTest {
 
         assert cookieAuthorization != null;
 
-        userDTO.setUsername(faker.name().username());
-        user.setEmail(faker.internet().emailAddress());
-        user.setName(faker.name().firstName());
-        user.setPassword(faker.internet().password());
-        user.setPhotoUrl("any_other_photo_url");
-
-        MockMultipartFile updateUserJson = TestUtils.stringToMMF(user);
-
-        var updateUserResponse = mvc.perform(
-                MockMvcRequestBuilders.multipart("/user/")
-                        .file(updateUserJson)
+        var signOutResponse = mvc.perform(
+                MockMvcRequestBuilders.get("/signout/")
                         .cookie(cookieAuthorization)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                        .with(request -> {
-                            request.setMethod("PUT");
-                            return request;
-                        })
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("")
         ).andReturn().getResponse();
 
-        int updateUserResponseStatusCode = updateUserResponse.getStatus();
+        int signOutResponseStatusCode = signOutResponse.getStatus();
 
-        assertThat(updateUserResponseStatusCode).isEqualTo(204);
+        assertThat(signOutResponseStatusCode).isEqualTo(200);
     }
 }

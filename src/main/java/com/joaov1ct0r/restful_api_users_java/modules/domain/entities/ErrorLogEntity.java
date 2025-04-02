@@ -21,7 +21,7 @@ public class ErrorLogEntity {
     private UUID userId;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "userId", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "userId", insertable = false, updatable = false)
     private UserEntity user;
 
     @Column(nullable = false)
@@ -29,7 +29,7 @@ public class ErrorLogEntity {
     private LocalDateTime timestamp;
 
     @Column(nullable = false)
-    private Number code;
+    private Integer code;
 
     @Column(nullable = false)
     private String description;
@@ -40,7 +40,7 @@ public class ErrorLogEntity {
             UUID id,
             @Nullable UUID userId,
             LocalDateTime timestamp,
-            Number code,
+            Integer code,
             String description
     ) {
         this.id = id;

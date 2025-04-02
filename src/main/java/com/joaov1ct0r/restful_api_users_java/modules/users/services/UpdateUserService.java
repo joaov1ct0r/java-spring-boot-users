@@ -91,7 +91,6 @@ public class UpdateUserService extends BaseService {
         userToUpdate.setEmail(userDTO.getEmail());
         userToUpdate.setUsername(userDTO.getUsername());
         userToUpdate.setUpdatedAt(LocalDateTime.now());
-        userToUpdate.setUserWhoUpdatedId(UUID.fromString(tokenUserId));
 
         UserEntity updatedUser = this.userRepository.save(userToUpdate);
 

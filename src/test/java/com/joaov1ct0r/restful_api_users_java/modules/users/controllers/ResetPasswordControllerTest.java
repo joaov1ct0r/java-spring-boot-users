@@ -1,10 +1,10 @@
-package com.joaov1ct0r.restful_api_users_java.modules.users.controllers.users;
+package com.joaov1ct0r.restful_api_users_java.modules.users.controllers;
 
 import com.github.javafaker.Faker;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.dtos.ResponseDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.ResetPasswordDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
-import com.joaov1ct0r.restful_api_users_java.modules.users.utils.TestUtils;
+import com.joaov1ct0r.restful_api_users_java.modules.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,7 +50,6 @@ public class ResetPasswordControllerTest {
                 faker.name().firstName(),
                 faker.internet().password(),
                 "any_photo_url",
-                LocalDateTime.now(),
                 LocalDateTime.now(),
                 null
         );

@@ -1,4 +1,4 @@
-package com.joaov1ct0r.restful_api_users_java.modules.users.services.users;
+package com.joaov1ct0r.restful_api_users_java.modules.users.services;
 
 import com.joaov1ct0r.restful_api_users_java.modules.domain.entities.ErrorLogEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.exceptions.BadRequestException;
@@ -103,7 +103,6 @@ public class UpdateUserServiceTest {
                         userDTO.getPassword(),
                         "any_photo_url",
                         LocalDateTime.now(),
-                        null,
                         null
                 )
         ));
@@ -116,7 +115,6 @@ public class UpdateUserServiceTest {
                         "any_other_password",
                         "any_photo_url",
                         LocalDateTime.now(),
-                        null,
                         null
                 )
         ));
@@ -148,7 +146,6 @@ public class UpdateUserServiceTest {
                         userDTO.getPassword(),
                         "any_photo_url",
                         LocalDateTime.now(),
-                        null,
                         null
                 )
         ));
@@ -162,7 +159,6 @@ public class UpdateUserServiceTest {
                         "any_other_password",
                         "any_photo_url",
                         LocalDateTime.now(),
-                        null,
                         null
                 )
         ));
@@ -194,7 +190,6 @@ public class UpdateUserServiceTest {
                         userDTO.getPassword(),
                         "any_photo_url",
                         LocalDateTime.now(),
-                        null,
                         null
                 )
         ));
@@ -208,7 +203,6 @@ public class UpdateUserServiceTest {
                         userDTO.getUsername(),
                         userDTO.getPassword(),
                         "any_photo_url",
-                        LocalDateTime.now(),
                         LocalDateTime.now(),
                         null
                 )

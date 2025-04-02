@@ -19,7 +19,7 @@ public class EventLogEntity {
     private UUID userId;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "userId", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "userId", insertable = false, updatable = false)
     private UserEntity user;
 
     @Column(nullable = false)

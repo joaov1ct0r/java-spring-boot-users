@@ -17,7 +17,7 @@ public abstract class BaseService {
 
     protected void generateErrorLog(
             @Nullable UUID userId,
-            Number code,
+            Integer code,
             String description
     ) {
         this.errorLogsRepository.save(

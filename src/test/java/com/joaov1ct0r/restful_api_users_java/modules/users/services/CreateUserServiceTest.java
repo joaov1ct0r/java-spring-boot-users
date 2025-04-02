@@ -1,4 +1,4 @@
-package com.joaov1ct0r.restful_api_users_java.modules.users.services.users;
+package com.joaov1ct0r.restful_api_users_java.modules.users.services;
 
 import com.joaov1ct0r.restful_api_users_java.modules.domain.exceptions.BadRequestException;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.entities.ErrorLogEntity;
@@ -78,7 +78,6 @@ public class CreateUserServiceTest {
                     "any_password",
                     "any_photo_url",
                     LocalDateTime.now(),
-                    null,
                     null
             )));
 
@@ -108,7 +107,6 @@ public class CreateUserServiceTest {
                     "any_other_password",
                     "any_photo_url",
                     LocalDateTime.now(),
-                    null,
                     null
             )));
 
