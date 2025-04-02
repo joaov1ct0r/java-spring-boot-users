@@ -27,7 +27,7 @@ public class FindAllUsersService extends BaseService {
         Page<UserEntity> users;
 
         if (isQuery) {
-            users = this.userRepository.findAllByNameContainingAndUsernameContainingAndEmailContaining(
+            users = this.userRepository.findAllByNameContainingOrUsernameContainingOrEmailContaining(
                     query.getName(),
                     query.getUsername(),
                     query.getEmail(),

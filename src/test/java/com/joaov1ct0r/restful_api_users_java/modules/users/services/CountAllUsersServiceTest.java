@@ -47,7 +47,7 @@ public class CountAllUsersServiceTest {
                 "any_email@mail.com"
         );
         when(
-                this.userRepository.countByNameContainingAndUsernameContainingAndEmailContaining(
+                this.userRepository.countByNameContainingOrUsernameContainingOrEmailContaining(
                         anyString(),
                         anyString(),
                         anyString(),

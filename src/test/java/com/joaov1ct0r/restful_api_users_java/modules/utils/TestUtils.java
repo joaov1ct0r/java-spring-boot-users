@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class TestUtils {
     public static MockMultipartFile stringToMMF(UserEntity user) {
-        String jsonData = String.format("{\"name\":\"%s\", \"email\":\"%s\", \"username\": \"%s\", \"password\": \"%s\", \"id\": \"%s\", \"photoUrl\": \"%s\", \"createdAt\": \"%s\", \"updatedAt\": \"%s\", \"userWhoUpdatedId\": \"%s\"}", user.getName(), user.getEmail(), user.getUsername(), user.getPassword(), user.getId(), user.getPhotoUrl(), user.getCreatedAt(), user.getUpdatedAt());
+        String jsonData = String.format("{\"name\":\"%s\", \"email\":\"%s\", \"username\": \"%s\", \"password\": \"%s\", \"id\": \"%s\", \"photoUrl\": \"%s\", \"createdAt\": \"%s\", \"updatedAt\": \"%s\"}", user.getName(), user.getEmail(), user.getUsername(), user.getPassword(), user.getId(), user.getPhotoUrl(), user.getCreatedAt(), user.getUpdatedAt());
         return new MockMultipartFile("user", "", "application/json", jsonData.getBytes());
     }
 

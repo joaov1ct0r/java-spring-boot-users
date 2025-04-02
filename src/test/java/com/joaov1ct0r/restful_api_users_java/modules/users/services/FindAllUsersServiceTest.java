@@ -47,7 +47,7 @@ public class FindAllUsersServiceTest {
                 "any_email@mail.com"
         );
         when(
-                this.userRepository.findAllByNameContainingAndUsernameContainingAndEmailContaining(
+                this.userRepository.findAllByNameContainingOrUsernameContainingOrEmailContaining(
                         anyString(),
                         anyString(),
                         anyString(),

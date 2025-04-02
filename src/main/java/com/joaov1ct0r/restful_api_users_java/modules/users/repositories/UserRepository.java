@@ -10,13 +10,13 @@ import org.springframework.data.domain.Pageable;
 public interface UserRepository extends JpaRepository<UserEntity, UUID> {
     Optional<UserEntity> findByUsername(String username);
     Optional<UserEntity> findByEmail(String email);
-    Page<UserEntity> countByNameContainingAndUsernameContainingAndEmailContaining(
+    Page<UserEntity> countByNameContainingOrUsernameContainingOrEmailContaining(
             String name,
             String username,
             String email,
             Pageable pageable
     );
-    Page<UserEntity> findAllByNameContainingAndUsernameContainingAndEmailContaining(
+    Page<UserEntity> findAllByNameContainingOrUsernameContainingOrEmailContaining(
             String name,
             String username,
             String email,
