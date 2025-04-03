@@ -7,7 +7,6 @@ import com.joaov1ct0r.restful_api_users_java.modules.domain.repositories.ErrorLo
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.users.repositories.UserRepository;
-import com.joaov1ct0r.restful_api_users_java.modules.users.services.DeleteUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
