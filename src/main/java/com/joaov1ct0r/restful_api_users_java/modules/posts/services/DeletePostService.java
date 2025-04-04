@@ -50,16 +50,16 @@ public class DeletePostService extends BaseService {
 
         }
 
-        boolean userIsNotOwnerOfPost = post.get().getUserWhoCreatedId() != user.get().getId();
+        boolean userIsOwnerOfPost = post.get().getUserWhoCreatedId().equals(user.get().getId());
 
-        if (userIsNotOwnerOfPost) {
+        if (!userIsOwnerOfPost) {
             this.generateErrorLog(
                     userId,
                     403,
                     "Usuário com id: " + userId + " tentou excluir post com id: " + postId + ", porem não possui permissão!"
             );
 
-            throw this.forbiddenException("Não permitido!");
+            throw this.forbiddenException("Não permitido!!!");
         }
 
         this.postRepository.deleteById(postId);

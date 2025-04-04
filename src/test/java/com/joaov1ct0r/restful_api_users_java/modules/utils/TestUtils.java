@@ -3,6 +3,9 @@ package com.joaov1ct0r.restful_api_users_java.modules.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.dtos.ResponseDTO;
+import com.joaov1ct0r.restful_api_users_java.modules.posts.dtos.PostDTO;
+import com.joaov1ct0r.restful_api_users_java.modules.posts.entities.PostEntity;
+import com.joaov1ct0r.restful_api_users_java.modules.posts.mappers.PostMapper;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.users.mappers.UserMapper;
@@ -36,9 +39,34 @@ public class TestUtils {
         }
     }
 
+    public static PostDTO jsonToPostDTO(String json, Class<PostDTO> postDTO) {
+        try {
+            String data = json.substring(json.indexOf("{") + 1, json.lastIndexOf("}"));
+
+            String[] parts = data.split(",\\s*");
+
+            String id = parts[0].split("=")[1];
+            String content = parts[1].split("=")[1];
+            String createdAt = parts[2].split("=")[1];
+            String updatedAt = parts[3].split("=")[1];
+            String userWhoCreatedId = parts[4].split("=")[1];
+
+            return PostMapper.toDTO(
+                    new PostEntity(
+                            UUID.fromString(id),
+                            content,
+                            LocalDateTime.parse(createdAt),
+                            LocalDateTime.parse(updatedAt),
+                            UUID.fromString(userWhoCreatedId)
+                    )
+            );
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     public static UserDTO jsonToUserDTO(String json, Class<UserDTO> userDTO) {
         try {
-            System.out.println(userDTO);
             String data = json.substring(json.indexOf("{") + 1, json.lastIndexOf("}"));
 
             String[] parts = data.split(",\\s*");
