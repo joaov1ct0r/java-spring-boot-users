@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -37,6 +38,7 @@ public class CreatePostController extends BaseController {
             }),
             @ApiResponse(responseCode = "500", description = "Erro Interno")
     })
+    @SecurityRequirement(name = "jwt_auth")
     public ResponseEntity<Object> handle(
             HttpServletRequest req,
             @RequestBody @Valid CreatePostDTO post

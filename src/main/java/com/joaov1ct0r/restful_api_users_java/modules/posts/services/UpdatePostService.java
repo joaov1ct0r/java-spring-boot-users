@@ -10,6 +10,8 @@ import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.users.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,7 +32,7 @@ public class UpdatePostService extends BaseService {
             this.generateErrorLog(
                     userId,
                     400,
-                    "Usuário com id: " + userId + " tentou atualizar um post, porem usuário não foi encontrado!"
+                    "Usuário com id: " + userId.toString() + " tentou atualizar um post, porem usuário não foi encontrado!"
             );
 
             throw this.badRequestException("Usuário não encontrado!");
@@ -64,6 +66,7 @@ public class UpdatePostService extends BaseService {
 
         PostEntity postToUpdate = post.get();
         postToUpdate.setContent(postDTO.getContent());
+        postToUpdate.setUpdatedAt(LocalDateTime.now());
 
         PostEntity updatedPost = this.postRepository.save(postToUpdate);
 
