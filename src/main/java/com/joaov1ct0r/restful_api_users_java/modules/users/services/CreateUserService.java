@@ -1,6 +1,7 @@
 package com.joaov1ct0r.restful_api_users_java.modules.users.services;
 
 import com.joaov1ct0r.restful_api_users_java.modules.domain.services.BaseService;
+import com.joaov1ct0r.restful_api_users_java.modules.domain.services.FileStorageService;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.services.S3Service;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.CreateUserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UserDTO;
@@ -9,12 +10,16 @@ import com.joaov1ct0r.restful_api_users_java.modules.users.mappers.UserMapper;
 import com.joaov1ct0r.restful_api_users_java.modules.users.repositories.UserRepository;
 import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class CreateUserService extends BaseService {
+    @Value("${SPRING_PROFILES_ACTIVE:prod}")
+    private String env;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -23,6 +28,9 @@ public class CreateUserService extends BaseService {
 
     @Autowired
     private S3Service s3Service;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     public UserDTO execute(CreateUserDTO user, @Nullable MultipartFile file) throws Exception {
         boolean nameIsInUseByOtherUser = this.userRepository.findByUsername(user.getUsername()).isPresent();
@@ -54,8 +62,13 @@ public class CreateUserService extends BaseService {
 
         boolean fileIsPresent = file != null;
 
-        if (fileIsPresent) {
+        if (fileIsPresent && this.env.equals("prod")) {
             String fileName = this.s3Service.uploadFile(file);
+            user.setPhotoUrl(fileName);
+        }
+
+        if (fileIsPresent && this.env.equals("dev")) {
+            String fileName = this.fileStorageService.storeFile(file);
             user.setPhotoUrl(fileName);
         }
 

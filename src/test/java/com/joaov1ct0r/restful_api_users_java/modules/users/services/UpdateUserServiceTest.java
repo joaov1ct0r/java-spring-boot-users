@@ -4,6 +4,7 @@ import com.joaov1ct0r.restful_api_users_java.modules.domain.entities.ErrorLogEnt
 import com.joaov1ct0r.restful_api_users_java.modules.domain.exceptions.BadRequestException;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.exceptions.ForbiddenException;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.repositories.ErrorLogsRepository;
+import com.joaov1ct0r.restful_api_users_java.modules.domain.services.FileStorageService;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UpdateUserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.users.repositories.UserRepository;
@@ -42,11 +43,15 @@ public class UpdateUserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private FileStorageService fileStorageService;
+
     @BeforeEach
     public void beforeEachSetUp() {
         Mockito.reset(this.userRepository);
         Mockito.reset(this.errorLogsRepository);
         Mockito.reset(this.passwordEncoder);
+        Mockito.reset(this.fileStorageService);
 
         when(
                 this.errorLogsRepository.save(
@@ -172,7 +177,7 @@ public class UpdateUserServiceTest {
 
     @Test
     @DisplayName("Should be able to update user")
-    public void shouldBeAbleToUpdateUser() {
+    public void shouldBeAbleToUpdateUser() throws Exception {
         var userDTO = new UpdateUserDTO(
                 UUID.randomUUID().toString(),
                 "any_username",

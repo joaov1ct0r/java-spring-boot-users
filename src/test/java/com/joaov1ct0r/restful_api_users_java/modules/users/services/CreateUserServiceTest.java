@@ -2,6 +2,7 @@ package com.joaov1ct0r.restful_api_users_java.modules.users.services;
 
 import com.joaov1ct0r.restful_api_users_java.modules.domain.exceptions.BadRequestException;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.entities.ErrorLogEntity;
+import com.joaov1ct0r.restful_api_users_java.modules.domain.services.FileStorageService;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.CreateUserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.repositories.ErrorLogsRepository;
@@ -42,11 +43,15 @@ public class CreateUserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private FileStorageService fileStorageService;
+
    @BeforeEach
     public void beforeEachSetUp() {
         Mockito.reset(this.userRepository);
         Mockito.reset(this.passwordEncoder);
         Mockito.reset(this.errorLogsRepository);
+        Mockito.reset(this.fileStorageService);
 
         when(this.errorLogsRepository.save(any())).thenReturn(
                 new ErrorLogEntity(

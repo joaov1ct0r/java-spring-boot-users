@@ -1,6 +1,7 @@
 package com.joaov1ct0r.restful_api_users_java.modules.users.services;
 
 import com.joaov1ct0r.restful_api_users_java.modules.domain.services.BaseService;
+import com.joaov1ct0r.restful_api_users_java.modules.domain.services.FileStorageService;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.services.S3Service;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UpdateUserDTO;
 import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UserDTO;
@@ -9,6 +10,7 @@ import com.joaov1ct0r.restful_api_users_java.modules.users.mappers.UserMapper;
 import com.joaov1ct0r.restful_api_users_java.modules.users.repositories.UserRepository;
 import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +20,9 @@ import java.util.UUID;
 
 @Service
 public class UpdateUserService extends BaseService {
+    @Value("${SPRING_PROFILES_ACTIVE:prod}")
+    private String env;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -27,7 +32,10 @@ public class UpdateUserService extends BaseService {
     @Autowired
     private S3Service s3Service;
 
-    public UserDTO execute(UpdateUserDTO userDTO, String tokenUserId, @Nullable MultipartFile file) {
+    @Autowired
+    private FileStorageService fileStorageService;
+
+    public UserDTO execute(UpdateUserDTO userDTO, String tokenUserId, @Nullable MultipartFile file) throws Exception {
         var isUserRegistered = this.userRepository.findById(UUID.fromString(tokenUserId));
 
         var userWasntFound = isUserRegistered.isEmpty();
@@ -82,8 +90,13 @@ public class UpdateUserService extends BaseService {
 
         boolean fileIsPresent = file != null;
 
-        if (fileIsPresent) {
+        if (fileIsPresent && this.env.equals("prod")) {
             String fileName = this.s3Service.uploadFile(file);
+            userToUpdate.setPhotoUrl(fileName);
+        }
+
+        if (fileIsPresent && this.env.equals("dev")) {
+            String fileName = this.fileStorageService.storeFile(file);
             userToUpdate.setPhotoUrl(fileName);
         }
 
