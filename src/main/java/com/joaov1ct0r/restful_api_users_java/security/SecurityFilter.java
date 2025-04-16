@@ -74,6 +74,10 @@ public class SecurityFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
 
+        if (path.endsWith(".jpg")) return true;
+        if (path.endsWith(".jpeg")) return true;
+        if (path.endsWith(".png")) return true;
+
         if (path.equals("/signin/")) return true;
 
         if (path.equals("/signup/")) return true;

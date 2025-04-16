@@ -12,13 +12,15 @@ import java.util.UUID;
 
 @Service
 public class FileStorageService {
-    private final Path fileStorageLocation = Paths.get("uploads").toAbsolutePath().normalize();
+//    private final Path fileStorageLocation = Paths.get("C:\\Users\\jov90\\projects\\java-spring-boot-users\\src\\main\\resources\\public").toAbsolutePath().normalize();
+    private final Path fileStorageLocation = Paths.get("/app/uploads").toAbsolutePath().normalize();
 
     public FileStorageService() throws IOException {
         Files.createDirectories(this.fileStorageLocation);
     }
 
     public String storeFile(MultipartFile file) throws IOException {
+        System.out.println("path: " + this.fileStorageLocation);
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
         if (fileName.contains("..")) {
@@ -30,6 +32,6 @@ public class FileStorageService {
         Path targetLocation = this.fileStorageLocation.resolve(newFileName);
         Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-        return "http://localhost:8080/uploads/" + newFileName;
+        return "http://localhost:8080/" + newFileName;
     }
 }
