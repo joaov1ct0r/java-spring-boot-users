@@ -35,7 +35,9 @@ public class ResetPasswordControllerTest {
 
     @Before
     public void setup() {
-        this.mvc = MockMvcBuilders.webAppContextSetup(this.context).apply(SecurityMockMvcConfigurers.springSecurity()).build();
+        this.mvc = MockMvcBuilders.webAppContextSetup(this.context)
+                .apply(SecurityMockMvcConfigurers.springSecurity())
+                .build();
 
         this.faker = new Faker();
     }
@@ -69,6 +71,7 @@ public class ResetPasswordControllerTest {
         assert response.getStatusCode().equals(201);
 
         ResetPasswordDTO resetPasswordDTO = new ResetPasswordDTO(user.getEmail());
+
         var resetPasswordResponse = mvc.perform(
                 MockMvcRequestBuilders.put("/reset_password/")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -76,9 +79,6 @@ public class ResetPasswordControllerTest {
         ).andReturn().getResponse();
 
         int resetPasswordResponseStatusCode = resetPasswordResponse.getStatus();
-
-        System.out.println("teste");
-        System.out.println("string: " + resetPasswordResponse.getContentAsString());
 
         assertThat(resetPasswordResponseStatusCode).isEqualTo(204);
     }
