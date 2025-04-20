@@ -52,7 +52,8 @@ public class UpdateUserService extends BaseService {
 
         var isUsernameInUseByOtherUser = this.userRepository.findByUsername(userDTO.getUsername());
 
-        var usernameIsntAvailable = isUsernameInUseByOtherUser.isPresent() && !isUsernameInUseByOtherUser.get().getId().equals(isUserRegistered.get().getId());
+        var usernameIsntAvailable = isUsernameInUseByOtherUser.isPresent() && !isUsernameInUseByOtherUser.get().getId()
+                .equals(isUserRegistered.get().getId());
 
         if (usernameIsntAvailable) {
             this.generateErrorLog(
@@ -67,7 +68,8 @@ public class UpdateUserService extends BaseService {
 
         var isEmailInUseByOtherUser = this.userRepository.findByEmail(userDTO.getEmail());
 
-        var emailIsntAvailable = isEmailInUseByOtherUser.isPresent() && !isEmailInUseByOtherUser.get().getId().equals(isUserRegistered.get().getId());
+        var emailIsntAvailable = isEmailInUseByOtherUser.isPresent() && !isEmailInUseByOtherUser.get().getId()
+                .equals(isUserRegistered.get().getId());
 
         if (emailIsntAvailable) {
             this.generateErrorLog(
