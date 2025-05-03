@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -30,7 +32,6 @@ public class FindAllPostsService extends BaseService {
                     query.getContent(),
                     page
             );
-
         } else {
             posts = this.postRepository.findAll(page);
         }

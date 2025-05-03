@@ -31,7 +31,7 @@ public class PostEntity {
     @Column()
     private UUID userWhoCreatedId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "UserWhoCreatedId", insertable = false, updatable = false)
     private UserEntity userWhoCreated;
 
@@ -81,5 +81,13 @@ public class PostEntity {
 
     public UUID getUserWhoCreatedId() {
         return this.userWhoCreatedId;
+    }
+
+    public UserEntity getUserWhoCreated() {
+        return this.userWhoCreated;
+    }
+
+    public void setUserWhoCreated(UserEntity userWhoCreated) {
+        this.userWhoCreated = userWhoCreated;
     }
 }

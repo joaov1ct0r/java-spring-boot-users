@@ -1,5 +1,7 @@
 package com.joaov1ct0r.restful_api_users_java.modules.posts.dtos;
 
+import com.joaov1ct0r.restful_api_users_java.modules.users.dtos.UserDTO;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -9,6 +11,16 @@ public class PostDTO {
     public LocalDateTime createdAt;
     public LocalDateTime updatedAt;
     public UUID userWhoCreatedId;
+
+    public UserDTO getUserWhoCreated() {
+        return this.userWhoCreated;
+    }
+
+    public void setUserWhoCreated(UserDTO userWhoCreated) {
+        this.userWhoCreated = userWhoCreated;
+    }
+
+    public UserDTO userWhoCreated;
 
     public UUID getId() {
         return this.id;

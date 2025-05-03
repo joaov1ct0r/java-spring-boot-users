@@ -1,10 +1,12 @@
 package com.joaov1ct0r.restful_api_users_java.modules.posts.services;
 
 import com.joaov1ct0r.restful_api_users_java.modules.posts.dtos.CreatePostDTO;
+import com.joaov1ct0r.restful_api_users_java.modules.posts.entities.PostEntity;
 import com.joaov1ct0r.restful_api_users_java.modules.posts.mappers.PostMapper;
 import com.joaov1ct0r.restful_api_users_java.modules.posts.repositories.PostRepository;
 import com.joaov1ct0r.restful_api_users_java.modules.posts.services.CreatePostService;
 import com.joaov1ct0r.restful_api_users_java.modules.domain.repositories.ErrorLogsRepository;
+import com.joaov1ct0r.restful_api_users_java.modules.users.entities.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,6 +18,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+
+import java.time.LocalDateTime;
 import java.util.UUID;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
@@ -46,7 +50,13 @@ public class CreatePostServiceTest {
                 "any_content"
         );
         when(this.postRepository.save(any())).thenReturn(
-                PostMapper.toPersistence(post, userId)
+                new PostEntity(
+                        UUID.randomUUID(),
+                        post.getContent(),
+                        LocalDateTime.now(),
+                        null,
+                        userId
+                )
         );
 
         var createdPost = this.sut.execute(post, userId);
